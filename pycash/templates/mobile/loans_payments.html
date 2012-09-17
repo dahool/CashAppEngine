@@ -1,0 +1,35 @@
+{% extends "mobile/index.html" %}
+<!DOCTYPE HTML>
+<html>
+<head>
+{% block header %}
+{{ block.super }} 
+{% endblock %}
+<body>
+{% block content %}
+<div data-role="page" id="swipemenu_payments">
+	<div data-role="header" data-theme="b">
+        <a href="{% url mobile:loans_list loan.person.id %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
+        <h1>{{loan.person.name}}</h1>
+        <a href="{% url mobile:loans_payments_add loan.id %}" data-icon="add" data-iconpos="notext" data-theme="f">Nuevo Pago</a>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="a" data-return="{% url mobile:loans_payments loan.id %}">
+		<ul data-role="listview">
+			<li data-role="list-divider">Pagos: {{loan.reason}}</li>
+			{% for payment in loan.payment_set.all %}
+			<li swipe-options='{"direction": "left", "buttons": [{"style": "r", "value": "Borrar", "href": "javascript:confirmSingleAction(\"{% url payment_delete %}\",\"{{payment.id}}\")"}]}'>
+				<h3>{{payment.date}}</h3>
+				<span class="ui-li-aside">${{payment.amount|floatformat:2}}</span>
+			</li>
+			{% empty %}
+			<li>Sin pagos registrados</li>
+			{% endfor %}
+		</ul>
+	</div><!-- /content -->
+</div><!-- /page -->
+{% endblock %}
+</body>
+</html>
+
+

@@ -1,0 +1,21 @@
+from django.conf.urls.defaults import patterns, url, include
+
+urlpatterns = patterns('',
+    (r'^mobile/',include('pycash.cash.controllers.url.mobile', namespace='mobile')),
+    (r'^paymentType/',include('pycash.cash.controllers.url.paymentType')),
+    (r'^subCategory/',include('pycash.cash.controllers.url.subCategory')),
+    (r'^tax/',include('pycash.cash.controllers.url.tax')),
+    (r'^loan/',include('pycash.cash.controllers.url.loan')),
+    (r'^payment/',include('pycash.cash.controllers.url.payment')),
+    (r'^income/',include('pycash.cash.controllers.url.income')),
+    (r'^expense/',include('pycash.cash.controllers.url.expense')),
+    (r'^stats/',include('pycash.cash.controllers.url.stats')),
+    (r'^category/',include('pycash.cash.controllers.url.category')),
+    (r'^person/',include('pycash.cash.controllers.url.person')),
+    (r'^card/',include('pycash.cash.controllers.url.card')),                       
+    (r'^cardDates/',include('pycash.cash.controllers.url.cardDates')),
+    (r'^cardExpense/',include('pycash.cash.controllers.url.cardExpense')),
+    (r'^debits/',include('pycash.cash.controllers.url.debits')),
+    (r'^sync/',include('pycash.cash.controllers.url.sync')),
+    (r'^token/',include('pycash.cash.controllers.url.token', namespace='token')),
+)

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+{% block header %}
+<title>{{settings.APPLICATION}} Mobile</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+<link media="screen" href="{{ STATIC_URL }}mobile/mobile.extra.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}android/android-theme.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.datebox.min.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog.min.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/swipe.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/default.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/functions.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/swipe.list.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/application.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}android/jquery.mobile.android-theme.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.datebox.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.datebox.i8n.es.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog.min.js"></script>
+{% endblock %}
+</head>
+<body>
+{% block content %}
+<div data-role="page" id="main">
+
+	<div data-role="header">
+		<h1>Cash for Mobile v{{settings.MOBILE_VERSION}}</h1>
+		<a href="{% url auth_logout %}" data-icon="delete" data-iconpos="notext" class="ui-btn-right" data-ajax="false">Logout</a>
+	</div><!-- /header -->
+
+	<div data-role="content" id="main_nav">	
+        <div class="ui-grid-b">
+            <a href="#expenses" class="menu-element expense" data-role="button" data-inline="true">
+                Gastos
+            </a>
+            <a href="{% url mobile:loans %}" class="menu-element loan" data-role="button" data-inline="true">
+                Préstamos
+            </a>            
+        </div>
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+<div data-role="page" id="expenses">
+	<div data-role="header" data-theme="f">
+        <a href="{% url mobile:home %}" data-icon="home" data-iconpos="notext"></a>
+        <h1>Gastos</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" id="main_nav">
+        <div class="ui-grid-b">
+            <a href="{% url mobile:expenses_add %}" class="menu-element additem" data-role="button" data-inline="true">
+                Nuevo
+            </a>
+            <a href="{% url mobile:expenses_list %}" class="menu-element listitem" data-role="button" data-inline="true">
+                Listado
+            </a>            
+        </div>
+        
+	</div><!-- /content -->
+</div><!-- /page -->
+
+<div data-role="page" id="add_person">
+	<div data-role="header" data-theme="f">
+        <a href="{% url mobile:loans %}" data-icon="back" data-rel="back">Volver</a>
+        <h1>Nueva Persona</h1>
+        <a data-icon="check" data-theme="c" form-submit="#form-add-person" return="back">Guardar</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+        <form id="form-add-person" action="{% url person_save %}" after-submit-clean="name">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                <div data-role="fieldcontain">
+                    <label for="name">Nombre:</label>
+                    <input field-focus="true" type="text" id="name" name="name" maxlength="255" value=""/>
+                </div>
+                </li>
+            </ul>
+        </form>
+	</div><!-- /content -->
+</div><!-- /page -->
+{% endblock %}
+</body>
+</html>
