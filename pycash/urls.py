@@ -8,10 +8,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login/$', 'pycash.cash.views.login', name='user_signin'),
+    url(r'^login/$', 'pycash.views.login', name='user_signin'),
     url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL }, name='auth_logout'),
-    url(r'^$','pycash.cash.views.mobile'),
-    url(r'',include('pycash.cash.controllers.urls')),
+    url(r'^$','pycash.views.mobile'),
+    url(r'',include('pycash.controllers.urls')),
 )
 
-urlpatterns += staticfiles_urlpatterns()
+#urlpatterns += staticfiles_urlpatterns()

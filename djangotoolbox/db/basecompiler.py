@@ -332,8 +332,11 @@ class NonrelCompiler(SQLCompiler):
         to this compiler. Called by QuerySet methods.
         """
         fields = self.get_fields()
-        results = self.build_query(fields).fetch(
-            self.query.low_mark, self.query.high_mark)
+        try:
+            results = self.build_query(fields).fetch(
+                    self.query.low_mark, self.query.high_mark)
+        except DatabaseError:
+            results = []
         for entity in results:
             yield self._make_result(entity, fields)
 

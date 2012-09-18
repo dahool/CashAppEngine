@@ -32,12 +32,33 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: expense
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: loan
+  properties:
+  - name: person_id
+  - name: remain
+
+- kind: payment
+  properties:
+  - name: loan_id
+  - name: date
+    direction: desc
+
 - kind: payment_type
   properties:
   - name: __key__
     direction: desc
 
 - kind: sub_category
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: tax
   properties:
   - name: __key__
     direction: desc

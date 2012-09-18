@@ -9,7 +9,8 @@ PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = "0.9.1"
 APPLICATION = "Cash Manager"
-MOBILE_VERSION = "1.1.0"
+MOBILE_VERSION = "1.1.1"
+JQUERY_VERSION = "1.7.1"
 
 # Activate django-dbindexer for the default database
 DATABASES['native'] = DATABASES['default']
@@ -25,11 +26,11 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
+    'django.contrib.admin',
+    'django.contrib.staticfiles',    
     'djangotoolbox',
     'dbindexer',
-    'django.contrib.admin',
-    'django.contrib.staticfiles',
-    'pycash.cash',
+    'pycash',
     # djangoappengine should come last, so it can override a few manage.py commands
     'djangoappengine',
 )
@@ -39,7 +40,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'pycash.cash.loginrequiredmiddleware.LoginRequiredMiddleware',
+    'pycash.auth.loginmiddleware.LoginRequiredMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -47,9 +48,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'common.context_processors.settings',
 )
 
-AUTHENTICATION_BACKENDS = ('pycash.settings_auth.SettingsAuthBackend',
+AUTHENTICATION_BACKENDS = ('pycash.auth.backends.SettingsAuthBackend',
                            'django.contrib.auth.backends.ModelBackend',)
                            
 LOGIN_URL = '/login'
