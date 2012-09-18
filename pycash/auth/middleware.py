@@ -1,5 +1,25 @@
+# -*- coding: utf-8 -*-
+"""Copyright (c) 2012 Sergio Gabriel Teves
+All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""
+
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
+import logging
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -30,10 +50,9 @@ class RemoteTokenMiddleware(object):
                 " MIDDLEWARE_CLASSES setting to insert"
                 " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
                 " before the RemoteUserMiddleware class.")
-
         try:
             data = request.POST[self.token_header]
-            username, token = data.split('-') 
+            username, token, token_key = data.split('-') 
         except:
             # If specified header doesn't exist then return (leaving
             # request.user set to AnonymousUser by the
@@ -46,7 +65,7 @@ class RemoteTokenMiddleware(object):
         # We are seeing this user for the first time in this session, attempt
         # to authenticate the user.
         try:
-            user = auth.authenticate(remote_token=token, remote_user=username, remote_ip=get_client_ip(request))
+            user = auth.authenticate(remote_token=token, remote_user=username, remote_ip=get_client_ip(request), token_key=token_key)
             if user:
                 request.user = user
                 auth.login(request, user)

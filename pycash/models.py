@@ -1,12 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
 from pycash.services.ModelUtils import capFirst
-
+from django.conf import settings
+    
 class AuthToken(models.Model):
     token = models.CharField(max_length=128, primary_key=True)
+    token_key = models.CharField(max_length=5)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
-    user = models.ForeignKey(User)
-    
+    user = models.ForeignKey(User, related_name="auth_token")
+ 
+    def __unicode__(self):
+        return u'%s - %s - %s' % (self.user, self.token, self.token_key)  
+       
+    def make_token(self):
+        from django.utils.hashcompat import sha_constructor
+        from random import choice
+        import time
+        allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+        number_chars = '123456789'
+        self.token = sha_constructor(str(time.time()) + ''.join([choice(allowed_chars) for i in range(10)])).hexdigest() 
+        self.token_key = ''.join([choice(number_chars) for i in range(5)])
+               
+    def save(self, **args):
+        if not self.pk:
+            self.make_token()
+        models.Model.save(self, **args)
+        
     class Meta:
         ordering = ['created']
         get_latest_by = "created"
@@ -16,6 +35,9 @@ class TokenUsage(models.Model):
     ip = models.CharField(max_length=15, db_index=True)
     access = models.DateTimeField(auto_now=True)
     
+    def __unicode__(self):
+        return u'%s - %s - %s' % (self.token.user, self.ip, self.access)  
+
     class Meta:
         get_latest_by = "access"
         
@@ -213,3 +235,42 @@ class Debits(models.Model):
     class Meta:
         db_table = "debits"
         verbose_name_plural = u'Debits'
+
+class SyncRecord(models.Model):
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    record = models.TextField()
+    operation = models.CharField(max_length=3)
+    
+    def __unicode__(self):
+        return "(%s) %s" % (self.created, self.operation)
+        
+    class Meta:
+        db_table = "syncrecord"
+        verbose_name_plural = u'SyncRecords'
+    
+record_sync_list = (Person, Income, PaymentType, Category, SubCategory, Tax, Expense, Loan, Payment)
+
+def object_update_callbak(sender, instance, created, **kwargs):
+    from django.core import serializers
+    value = serializers.serialize("json",[instance])
+    SyncRecord(record=value, operation= 'ADD' if created else 'UDP').save()
+        
+def object_delete_callbak(sender, instance, **kwargs):
+    from django.utils.encoding import smart_unicode    
+    SyncRecord(record='[{"pk": %(pk)s, "model": "%(model)s"}]' % {"model" : smart_unicode(instance._meta), "pk" : smart_unicode(instance._get_pk_val(), strings_only=True)}, operation='DEL').save()
+    
+def enable_sync():
+    if getattr(settings, 'ENABLE_RECORD', False):
+        from django.db.models.signals import post_save, post_delete
+        for sender in record_sync_list:
+            post_save.connect(object_update_callbak, sender)
+            post_delete.connect(object_delete_callbak, sender)
+            
+def disable_sync():
+    if getattr(settings, 'ENABLE_RECORD', False):
+        from django.db.models.signals import post_save, post_delete
+        for sender in record_sync_list:
+            post_save.disconnect(object_update_callbak, sender)
+            post_delete.disconnect(object_delete_callbak, sender)
+    
+enable_sync() 

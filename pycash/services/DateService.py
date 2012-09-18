@@ -14,6 +14,9 @@ def firstDateOfMonth(date):
 def parse(str):
     return time.strptime(str,"%d/%m/%Y")
 
+def parseDate(str):
+    return datetime.datetime.strptime(str,"%d/%m/%Y")
+
 def invert(date):
     if isinstance(date,basestring):
         date = parse(date)

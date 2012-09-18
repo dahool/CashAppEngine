@@ -40,6 +40,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'pycash.auth.middleware.RemoteTokenMiddleware',
     'pycash.auth.loginmiddleware.LoginRequiredMiddleware',
 )
 
@@ -52,12 +53,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = ('pycash.auth.backends.SettingsAuthBackend',
+                           'pycash.auth.backends.RemoteTokenBackend',
                            'django.contrib.auth.backends.ModelBackend',)
                            
 LOGIN_URL = '/login'
-LOGIN_EXEMPT_URLS = '/token'
+#LOGIN_EXEMPT_URLS = '/api'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
+
+EXPORT_URL = '192.168.1.50/api/import/'
 
 ADMIN_LOGIN='admin'
 ADMIN_PWD='admin'
@@ -75,5 +79,12 @@ STATIC_URL = '/media/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'pycash', 'templates'),)
 
 USE_GOOGLE_CAL = False
+ENABLE_RECORD = True
 
 ROOT_URLCONF = 'urls'
+
+try:
+    execfile(os.path.join(PROJECT_PATH,'settings_local.py'))
+except IOError:
+    GOOGLE_USER = "-"
+    GOOGLE_PASS = "-"

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from cash.models import Tax
-from cash.services import JsonParser, DateService, googlecalendar
+from pycash.models import Tax
+from pycash.services import JsonParser, DateService, googlecalendar
 import datetime
 from django.conf import settings
 

@@ -203,11 +203,11 @@ def fromParams(req):
         
     e.service=req['service']
     e.amount=req['amount']
-    e.expire=DateService.invert(req['expire'])
+    e.expire=DateService.parseDate(req['expire'])
     if param_exist("nextExpire",req):
-        e.nextExpire=DateService.invert(req['nextExpire'])
+        e.nextExpire=DateService.parseDate(req['nextExpire'])
     if param_exist("lastPay",req):
-        e.lastPay=DateService.invert(req['lastPay'])
+        e.lastPay=DateService.parseDate(req['lastPay'])
     e.account=req['account']
     e.subCategory=s
     e.paymentType=p
@@ -220,11 +220,11 @@ def pay(request):
     e = Tax.objects.get(pk=req['id'])
     if e:
         if param_exist("nextExpire",req):
-            e.expire = DateService.invert(req['nextExpire'])
+            e.expire = DateService.parseDate(req['nextExpire'])
         else:
             e.expire = e.nextExpire
         if param_exist("nextExpire2",req):
-            e.nextExpire = DateService.invert(req['nextExpire2'])
+            e.nextExpire = DateService.parseDate(req['nextExpire2'])
         else:
             e.nextExpire = None
         e.amount = req['amount']

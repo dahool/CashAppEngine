@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from cash.services.SyncService import SyncServiceClass
+from pycash.services.SyncService import SyncServiceClass
 
 class Command(BaseCommand):
     help = 'Sync Expenses'

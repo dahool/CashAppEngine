@@ -202,7 +202,7 @@ def fromParams(req):
         e = Expense()
         
     e.text=text
-    e.date=DateService.invert(req['date']) 
+    e.date=DateService.parseDate(req['date']) 
     e.amount=amount
     e.subCategory=s
     e.paymentType=p

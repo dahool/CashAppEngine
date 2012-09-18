@@ -39,6 +39,11 @@ indexes:
 
 - kind: loan
   properties:
+  - name: __key__
+    direction: desc
+
+- kind: loan
+  properties:
   - name: person_id
   - name: remain
 
@@ -53,7 +58,17 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: person
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: sub_category
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: syncrecord
   properties:
   - name: __key__
     direction: desc

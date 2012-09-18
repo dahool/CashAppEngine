@@ -77,7 +77,7 @@ def list(request):
 def from_request(request):
     req = request.REQUEST
     p = Person(pk=req['person.id'])
-    l = Loan(person=p,amount=req['amount'],date=DateService.invert(req['date']), reason=req['reason'], remain=req['amount'])
+    l = Loan(person=p,amount=req['amount'],date=DateService.parseDate(req['date']), reason=req['reason'], remain=req['amount'])
     if param_exist("id",req):
         l.pk = req['id']
 
@@ -100,7 +100,7 @@ def process_request(request):
     if not reason or reason.strip() == '':
         raise ValidationError(_('Required'), code=_('Reason'))
         
-    date=DateService.invert(req['date'])
+    date=DateService.parseDate(req['date'])
     
     l = Loan(person=p, amount=amount, reason=reason, remain=amount, date=date)
     if param_exist("id",req):

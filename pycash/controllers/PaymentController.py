@@ -63,7 +63,7 @@ def save_or_update(request):
             l.remain = unicode(float(l.remain) - float(amount))
 
         p.amount=amount
-        p.date=DateService.invert(req['date'])
+        p.date=DateService.parseDate(req['date'])
         
         try:
             l.save()
@@ -83,7 +83,7 @@ def save_or_update(request):
 def save(request):
     req = request.REQUEST
     l = Loan.objects.get(pk=req['loan.id'])
-    p = Payment(loan=l,amount=req['amount'],date=DateService.invert(req['date']))
+    p = Payment(loan=l,amount=req['amount'],date=DateService.parseDate(req['date']))
     
     if checkPayment(l,req['amount'],None):
         data = '{"success":true}'
@@ -113,7 +113,7 @@ def update(request):
         l.remain = unicode(float(l.remain) + diff)
         
         p.amount=req['amount']
-        p.date=DateService.invert(req['date'])
+        p.date=DateService.parseDate(req['date'])
             
         try:
             l.save()

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from cash.models import Expense, Debits
-from cash.services import JsonParser, DateService
+from pycash.models import Expense, Debits
+from pycash.services import JsonParser, DateService
 from django.db.models import Q
 from datetime import datetime
 

@@ -1,5 +1,6 @@
 *.py[co]
-
+settings_local.py
+.gaedata
 # Packages
 *.egg
 *.egg-info
