@@ -61,7 +61,7 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 
-EXPORT_URL = '192.168.1.50/api/import/'
+EXPORT_URL = 'localhost:8080/api/import/'
 
 # This test runner captures stdout and associates tracebacks with their
 # corresponding output. Helps a lot with print-debugging.
