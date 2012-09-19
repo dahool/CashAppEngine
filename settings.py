@@ -11,6 +11,7 @@ VERSION = "0.9.1"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.1.1"
 JQUERY_VERSION = "1.7.1"
+EXT_VERSION = '2.2.1'
 
 # Activate django-dbindexer for the default database
 DATABASES['native'] = DATABASES['default']
@@ -52,19 +53,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'common.context_processors.settings',
 )
 
-AUTHENTICATION_BACKENDS = ('pycash.auth.backends.SettingsAuthBackend',
-                           'pycash.auth.backends.RemoteTokenBackend',
-                           'django.contrib.auth.backends.ModelBackend',)
-                           
+AUTHENTICATION_BACKENDS = ('pycash.auth.backends.RemoteTokenBackend',
+                         'django.contrib.auth.backends.ModelBackend',)
+                               
 LOGIN_URL = '/login'
 #LOGIN_EXEMPT_URLS = '/api'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 
 EXPORT_URL = '192.168.1.50/api/import/'
-
-ADMIN_LOGIN='admin'
-ADMIN_PWD='admin'
 
 # This test runner captures stdout and associates tracebacks with their
 # corresponding output. Helps a lot with print-debugging.
@@ -78,6 +75,18 @@ MEDIA_URL = '/site_store/'
 STATIC_URL = '/media/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'pycash', 'templates'),)
 
+EXT_LOCATION = 'js/ext/' + EXT_VERSION + '/'
+UX_LOCATION = EXT_LOCATION + 'ux/'
+
+if on_production_server:
+    EXT_FILES = ['js/jquery/jquery-' + JQUERY_VERSION + '.min.js',
+                 EXT_LOCATION + 'adapter/jquery/ext-jquery-adapter.js',
+                 EXT_LOCATION + 'ext-all.js']
+else:
+    EXT_FILES = ['js/jquery/jquery-' + JQUERY_VERSION + '.min.js',
+                 EXT_LOCATION + 'adapter/jquery/ext-jquery-adapter.js',
+                 EXT_LOCATION + 'ext-all-debug.js']
+                 
 USE_GOOGLE_CAL = False
 ENABLE_RECORD = True
 
