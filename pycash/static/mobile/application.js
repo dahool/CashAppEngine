@@ -42,6 +42,14 @@ $(function() {
     $(document).on("pageshow", function(){
         $("[field-focus=true]").focus();
         $("[field-clear=true]").val("");
+        $("[reset-form=true]").find('input,select').each(function() {
+            if ($(this).is("select")) $(this).val(-1);
+            else if ($(this).is("[type=radio]")) {
+                $(this).attr('checked',false);
+                $(this).removeClass('ui-btn-active');
+            }
+            else $(this).val("");
+        });         
     });
 
 // force certain pages to be refreshed every time. mark such pages with
@@ -127,21 +135,27 @@ function doPostAction(url, data, elem, rte) {
 }
 
 function afterSubmit(elem, rte) {
+    if ($(elem).attr('after-submit-clean')) {
+        var values = $(elem).attr('after-submit-clean')
+        if ('form' == values) {
+            $(elem).find('input,select').each(function() {
+                $(this).val("");
+            });                
+        } else {
+            values = values.split(",");
+            $.each(values, function(idx, value) {
+                $("#"+value).val("");
+            });
+            $("#"+values[0]).focus();                
+        }
+    }    
     if (rte) {
         if (rte == 'back') {
             window.history.back();
         } else {
             $.mobile.changePage(rte, {reloadPage: true});
         }
-    } else {
-        if ($(elem).attr('after-submit-clean')) {
-            var values = $(elem).attr('after-submit-clean').split(",");
-            $.each(values, function(idx, value) {
-                $("#"+value).val("");
-            });
-            $("#"+values[0]).focus();
-        }
-    }    
+    }
 }
 
 function confirmSingleAction(url, id) {

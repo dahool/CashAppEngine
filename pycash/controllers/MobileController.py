@@ -21,7 +21,7 @@ from common.view.decorators import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from pycash.models import PaymentType, SubCategory, Expense, Person, Loan
+from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax
 import datetime
 from django.db.models import Sum
 
@@ -84,4 +84,34 @@ def loans_payments_add(request, id):
 def loans_add(request, id):
     p = Person.objects.get(pk=id)
     return {"person": p}
+   
+@render('mobile/tax.html') 
+def taxHome(request):
+    limit = (datetime.datetime.now() + datetime.timedelta(days=5))
+    upcoming = Tax.objects.filter(expire__lte=limit).order_by('expire')
+    return {"list": upcoming}
+
+@render('mobile/tax_list.html') 
+def taxList(request):
+    tlist = Tax.objects.all().order_by('service')
+    return {"list": tlist}
+
+@render('mobile/tax_add.html')
+def taxAdd(request, id = None):
+    if id:
+        e = Tax.objects.get(pk=id)
+    else:
+        e = None
+
+    pType = PaymentType.objects.all().order_by("name")
+    #cList = SubCategory.objects.all().order_by("category__name", "name")
+    cList = SubCategory.objects.all().order_by("name")
     
+    return {"paymentTypeList": pType,
+            "categoryList": sorted(cList, key=lambda scat: scat.category.name),
+            "tax": e}
+    
+@render('mobile/tax_pay.html')
+def taxPay(request, id):
+    e = Tax.objects.get(pk=id)
+    return {"tax": e}    

@@ -47,3 +47,6 @@ label.ui-input-text, label.ui-select {
 .menu-element.listitem {
     background-position: 0px -300px;
 }
+.menu-element.tax {
+	background: url(images/icons/tax-icon.png) no-repeat top left;
+}

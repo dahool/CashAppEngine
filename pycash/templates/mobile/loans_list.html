@@ -9,7 +9,7 @@
 <body>
 {% block content %}
 <div data-role="page">
-	<div data-role="header" data-theme="e">
+	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:loans %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
         <h1>Préstamos</h1>
         <a href="{% url mobile:loans_add person.id %}" data-icon="add" data-iconpos="notext" data-theme="f">Nuevo Préstamo</a>
@@ -35,6 +35,9 @@
 			{% endfor %}
 		</ul>
 	</div><!-- /content -->
+	
+	{% include "mobile/footer.html" %}
+	
 </div><!-- /page -->
 {% endblock %}
 </body>

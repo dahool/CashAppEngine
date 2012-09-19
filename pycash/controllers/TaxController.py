@@ -36,7 +36,8 @@ from django.conf import settings
 from pycash.services.Utils import show_sql, get_logger
 import sys
 from pycash.decorators import json_response
- 
+from django.core.exceptions import ValidationError
+
 @render('cash/tax/index.html')
 def index(request):
     return {}
@@ -84,12 +85,19 @@ def list(request):
     return data
 
 @json_response
-def save(request):
+def save_or_update(request):
     req = request.REQUEST
-    e = fromParams(req)
+    try:
+        e = fromParams(req)
+    except ValidationError, e:
+        data = '{"success":false, "msg": "%s"}' % ("".join(e.messages))
+        return data    
 
     safe = True
-    data = '{"success":true, "msg": "%s"}' % (_('Created Tax for Service <b>%(service)s</b>') % {'service':e.service})    
+    if e.id:
+        data = '{"success":true, "msg": "%s"}' % (_('Updated Service <b>%(service)s</b>') % {'service':e.service})   
+    else:
+        data = '{"success":true, "msg": "%s"}' % (_('Created Tax for Service <b>%(service)s</b>') % {'service':e.service})    
     try:
         elem = e.save()
     except _mysql_exceptions.Warning:
@@ -101,44 +109,10 @@ def save(request):
     if safe:
         if settings.USE_GOOGLE_CAL:
             try:
-                t = Tax.objects.get(id=elem.id)
-                event = googlecalendar.CalendarEvent(title=t.service + ' [$ ' + str(t.amount) + ']',
-                                                     start_date=DateService.midNight(t.expire),
-                                                     end_date=DateService.midNight(t.expire)+datetime.timedelta(days=1),
-                                                     description=t.account)
-                calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
-                ev = calendar.save_event(event)
-                t.gcalId = ev.get_id()
-                t.save()
-            except Exception, e1:
-                data = '{"success":true, "msg": "%s"}' % (e1.args)
-            
-    return data
-
-@json_response
-def update(request):
-    req = request.REQUEST
-    o = Tax.objects.get(pk=req['id'])
-    e = fromParams(req)
-
-    safe = True
-    data = '{"success":true, "msg": "%s"}' % (_('Updated Service <b>%(service)s</b>') % {'service':e.service})    
-    try:
-        e.save()
-    except _mysql_exceptions.Warning:
-        pass
-    except Exception, e1:
-        safe = False
-        data = '{"success":false, "msg": "%s"}' % (e1.args)
-    
-    if safe:
-        if settings.USE_GOOGLE_CAL:
-            # ADD TO CALENDAR
-            try:
-                update_calendar(req['id'])
+                update_calendar(elem.id)
             except Exception, e1:
                 pass
-                    
+            
     return data
 
 @transaction.autocommit
@@ -152,13 +126,11 @@ def update_calendar(id):
 
     if event is False:
         event = googlecalendar.CalendarEvent(title=tax.service + ' [$ ' + str(tax.amount) + ']',
-                                             start_date=DateService.midNight(tax.expire),
-                                             end_date=DateService.midNight(tax.expire)+datetime.timedelta(days=1),
+                                             start_date=DateService.getDate(tax.expire),
                                              description=tax.account)
     else:
         event.set_title(tax.service + ' [$ ' + str(tax.amount) + ']')
-        event.set_start_date(DateService.midNight(tax.expire))
-        event.set_end_date(DateService.midNight(tax.expire)+datetime.timedelta(days=1))
+        event.set_start_date(DateService.getDate(tax.expire))
         event.set_description(tax.account)
         
     try:
@@ -171,7 +143,8 @@ def update_calendar(id):
         tax.updated = True
     finally:
         tax.save()
-        
+    return tax.updated
+    
 @json_response        
 def delete(request):
     e = Tax.objects.get(pk=request.REQUEST['id'])
@@ -193,8 +166,15 @@ def delete(request):
     return HttpResponse(data, mimetype='text/javascript;')
     
 def fromParams(req):
-    s = SubCategory.objects.get(pk=req['subCategory.id'])
-    p = PaymentType(pk=req['paymentType.id'])
+    
+    try:
+        s = SubCategory.objects.get(pk=req['subCategory.id'])
+    except SubCategory.DoesNotExist:
+        raise ValidationError(_('Select a valid category'))
+    try:
+        p = PaymentType.objects.get(pk=req['paymentType.id'])
+    except (PaymentType.DoesNotExist, KeyError):
+        raise ValidationError(_('Select a valid payment type'))
 
     if param_exist("id",req):
         e = Tax.objects.get(pk=req['id'])
@@ -223,6 +203,9 @@ def pay(request):
             e.expire = DateService.parseDate(req['nextExpire'])
         else:
             e.expire = e.nextExpire
+        if not e.expire:
+            return '{"success":false, "msg": "%s"}' % ("Ingrese próximo vencimiento.")
+            
         if param_exist("nextExpire2",req):
             e.nextExpire = DateService.parseDate(req['nextExpire2'])
         else:

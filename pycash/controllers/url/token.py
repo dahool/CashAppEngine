@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
-from cash.controllers import TokenController as controller
+from pycash.controllers import TokenController as controller
 
 urlpatterns = patterns('',
     url(r'^list$', controller.list, name='list'),

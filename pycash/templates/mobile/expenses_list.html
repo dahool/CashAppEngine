@@ -7,7 +7,7 @@
 {% endblock %}
 <body>
 {% block content %}
-<div data-role="page" id="swipemenu_expenses" data-cache="never">
+<div data-role="page" id="swipemenu_expenses" data-cache="never" data-position="fixed">
 	<div data-role="header" data-theme="e">
         <a href="{% url mobile:expenses %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
         <h1>Listado</h1>
@@ -36,6 +36,8 @@
 		<a href="#" data-icon="refresh" data-theme="a" data-cache="false">Actualizar</a> 
 	</div> 
 -->	
+	{% include "mobile/footer.html" %}
+	
 </div><!-- /page -->
 {% endblock %}
 </body>

@@ -31,6 +31,13 @@ def format(date):
     else:
         return time.strftime("%d/%m/%Y",date)
 
+def getDate(d):
+    if isinstance(d,datetime.date):
+        return d
+    if isinstance(d,datetime.datetime):
+        return d.date()
+    return datetime.date(d.tm_year, d.tm_mon, d.tm_mday)
+
 def midNight(date):
     if isinstance(date,datetime.date):
         dt = date.timetuple()

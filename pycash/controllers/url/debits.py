@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url, include
 from pycash.controllers import DebitsController as controller
 
 urlpatterns = patterns('',

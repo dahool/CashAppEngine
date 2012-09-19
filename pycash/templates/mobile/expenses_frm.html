@@ -9,7 +9,7 @@
 <body>
 {% block content %}
 <div data-role="page">
-	<div data-role="header" data-theme="e">
+	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:expenses %}" data-icon="minus" data-theme="b" data-rel="back">Cancelar</a>
         <h1>Gastos</h1>
         {% if expense %}
@@ -66,6 +66,9 @@
             </ul>
         </form>
 	</div><!-- /content -->
+	
+	{% include "mobile/footer.html" %}
+	
 </div><!-- /page -->
 {% endblock %}
 </body>
