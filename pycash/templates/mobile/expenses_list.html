@@ -14,8 +14,8 @@
         <a href="{% url mobile:expenses_add %}" data-icon="add" data-theme="f">Nuevo</a>
 	</div><!-- /header -->
 
-	<div data-role="content" data-theme="a" data-return="{% url mobile:expenses_list %}">
-        <ul data-role="listview">
+	<div data-role="content" data-return="{% url mobile:expenses_list %}">
+        <ul data-role="listview" data-theme="a" data-inset="true">
             {% regroup list by date as exp_group %}
             {% for group in exp_group  %}
                 <li data-role="list-divider">{% ifequal today group.grouper %}Hoy{% else %}{{group.grouper}}{% endifequal %}</li>

@@ -21,6 +21,7 @@ function createSwipeMenu() {
 		// add swipe event to the list item, removing it first (if it exists)
         var direction = 'swipe'+opts.direction;
         var fn = function(e){
+            $('.divSwipe').remove();
             e.stopPropagation();
             e.preventDefault();              
 			// create buttons and div container
@@ -34,6 +35,7 @@ function createSwipeMenu() {
 				$divSwipe.prepend($b);	
 			});
 			// insert buttons into divSwipe
+			$divSwipe.height($li.innerHeight());
 			$divSwipe.show(100);
 			// add escape route for swipe menu
 		};
