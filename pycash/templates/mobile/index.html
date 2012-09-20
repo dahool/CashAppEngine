@@ -11,6 +11,7 @@
 <!--link media="screen" href="{{ STATIC_URL }}android/android-theme.css" type="text/css" rel="stylesheet" /-->
 <link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.datebox.min.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog.min.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.notify.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/swipe.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/default.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
@@ -22,6 +23,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.datebox.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.datebox.i8n.es.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.notify.js"></script>
 {% endblock %}
 </head>
 <body>
@@ -36,7 +38,7 @@
 	<div data-role="content">
 		<ul data-role="listview" data-inset="true">
         	<li data-icon="false">
-        		<a href="{% url mobile:expenses %}">
+        		<a href="{% url mobile:expenses %}" data-prefetch>
         			<div class="menu-element expense"><div>Gastos</div></div>
         		</a>
         	</li>

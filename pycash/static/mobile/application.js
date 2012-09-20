@@ -15,9 +15,14 @@ $(function() {
             return false;
         }); 
     });*/
-    $(document).on("mobileinit", function(){
-        $.mobile.loadingMessage = "Cargando...";
-    });
+
+    $( document ).bind( 'mobileinit', function(){
+        $.mobile.loader.prototype.options.text = "Cargando...";
+        $.mobile.loader.prototype.options.textVisible = true;
+        $.mobile.loader.prototype.options.theme = "a";
+        $.mobile.loader.prototype.options.html = "";
+        $.mobile.page.prototype.options.domCache = true;
+      });
     
     $(document).on("pageinit", function(){
         /*$('a[data-cache=false]').unbind('click').on('click', function() {
@@ -37,6 +42,7 @@ $(function() {
             doPostAction($(frm).attr('action'), $(frm).serialize(), frm, rte);
             return false;
         });
+        $("[data-role=header]").fixedtoolbar({ tapToggle: false });
     });     
     
     $(document).on("pageshow", function(){
@@ -56,9 +62,10 @@ $(function() {
 // force certain pages to be refreshed every time. mark such pages with
 // 'data-cache="never"'
 //
-    jQuery('div').live('pagehide', function(event, ui){
+    jQuery(document).on('pagehide', 'div', function(event, ui) {
+      
       var page = jQuery(event.target);
-
+      
       if(page.attr('data-cache') == 'never'){
         page.remove();
       };
@@ -126,6 +133,12 @@ function doPostAction(url, data, elem, rte) {
         success: function(data) {
         	if (data.success) {
             	if (data.msg) {
+                    $(elem).notify({'msg': data.msg,
+                        'type': 'success',
+                        'onClose': function() {
+                            afterSubmit(elem, rte);
+                        }});            	    
+            	    /*
                     $(elem).simpledialog({
                         'mode' : 'bool',
                         'prompt' : data.msg,
@@ -137,12 +150,19 @@ function doPostAction(url, data, elem, rte) {
                             }
                         }
                     }
-                    });
+                    });*/
             	}  else {
                     afterSubmit(elem, rte);
                 }
         	} else {
-            	if (data.msg) {
+        	    if (data.msg) {
+        	        $(elem).notify({'msg': data.msg,
+        	                        'type': 'error',
+        	                        'onClose': function() {
+        	                            $("[field-focus=true]").focus();
+        	                        }});
+        	    }
+            	/*if (data.msg) {
                     $(elem).simpledialog({
                         'mode' : 'bool',
                         'prompt' : data.msg,
@@ -155,11 +175,15 @@ function doPostAction(url, data, elem, rte) {
                             }
                         }
                     });
-            	}        		
+            	} */       		
         	}
         },
         dataType: "json"
     });
+}
+
+function showError(msg) {
+    $("#notify").html(msg).notify('show');
 }
 
 function afterSubmit(elem, rte) {
