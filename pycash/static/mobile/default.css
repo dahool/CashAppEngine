@@ -1,3 +1,7 @@
+.ui-hide-label {
+	width: 50px;
+	border: 0 none;
+}
 .ui-li-divider {
     text-align: center;
 }

@@ -33,11 +33,11 @@
                 </div>
                 <div data-role="fieldcontain">
                     <label for="expire">Vencimiento:</label>
-                    <input type="date" data-role="datebox" value="{% if tax %}{{tax.expire|date:"d/m/Y"}}{%endif%}" name="expire" id="expire" data-options='{"buttonTheme": "b", "disableManualInput": true}' />
+                    <input type="date" data-role="datebox" value="{% if tax %}{{tax.expire|date:"d/m/Y"}}{%endif%}" name="expire" id="expire" />
                 </div>
                 <div data-role="fieldcontain">
                     <label for="nextExpire">Pr&oacute;ximo:</label>
-                    <input type="date" data-role="datebox" value="{% if tax %}{{tax.nextExpire|date:"d/m/Y"}}{%endif%}" name="nextExpire" id="nextExpire" data-options='{"buttonTheme": "b", "disableManualInput": true}' />
+                    <input type="date" data-role="datebox" value="{% if tax %}{{tax.nextExpire|date:"d/m/Y"}}{%endif%}" name="nextExpire" id="nextExpire" />
                 </div>
                 <div data-role="fieldcontain">
                     <label for="account">Cuenta:</label>

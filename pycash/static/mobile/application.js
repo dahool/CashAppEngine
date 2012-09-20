@@ -1,21 +1,4 @@
 $(function() {
-        // catch forms
-/*    $(document).on("pageload", function() {
-        $('a[data-cache=false]').on('click', function() {
-            var $this = $(this);
-            $.mobile.changePage($this.attr('href'),{reloadPage: true, transition: "fade"});
-        });
-        $('[form-submit]').on("click",function() {
-            var frm = $(this).attr('form-submit');
-            var rte = false;
-            if ($(this).attr('return')) {
-            	rte = $(this).attr('return');
-            }
-            doPostAction($(frm).attr('action'), $(frm).serialize(), frm, rte);
-            return false;
-        }); 
-    });*/
-
     $( document ).bind( 'mobileinit', function(){
         $.mobile.loader.prototype.options.text = "Cargando...";
         $.mobile.loader.prototype.options.textVisible = true;
@@ -25,14 +8,6 @@ $(function() {
       });
     
     $(document).on("pageinit", function(){
-        /*$('a[data-cache=false]').unbind('click').on('click', function() {
-            var $this = $(this);
-            var href = $this.attr('href');
-            if (href == '#') {
-                href = $.mobile.path.get();
-            }
-            $.mobile.changePage(href,{reloadPage: true, transition: "fade"});
-        });*/
         $('[form-submit]').unbind('click').on("click",function() {
             var frm = $(this).attr('form-submit');
             var rte = false;
@@ -44,6 +19,11 @@ $(function() {
         });
         $("[data-role=header]").fixedtoolbar({ tapToggle: false });
     });     
+    
+    $(document).on("dateboxbeforecreate", function() {
+        $.mobile.datebox.prototype.options.lang = 'es';
+        $.mobile.datebox.prototype.options.disableManualInput = true;
+    })
     
     $(document).on("pageshow", function(){
         $("[field-focus=true]").focus();
@@ -59,36 +39,16 @@ $(function() {
         summatory();
     });
 
+   // initDatebox();
 // force certain pages to be refreshed every time. mark such pages with
 // 'data-cache="never"'
 //
     jQuery(document).on('pagehide', 'div', function(event, ui) {
-      
       var page = jQuery(event.target);
-      
       if(page.attr('data-cache') == 'never'){
         page.remove();
       };
     });
-
-// for pages marked with 'data-cache="never"' manually add a back button since
-// JQM doesn't. this is *okay* because we know the browswer history stack is
-// intact and goes to the correct 'back' location.
-// specified back button - however!
-//
-/*
-    jQuery('div').live('pagebeforecreate', function(event, ui){
-      var page = jQuery(event.target);
-
-      if(page.attr('data-cache') == 'never'){
-        var header = page.find('[data-role="header"]');
-
-        if(header.find('[data-rel="back"]').size() == 0){
-          var back = jQuery('<a href="#" data-icon="back" data-rel="back">Back</a>');
-          header.prepend(back);
-        };
-      };
-    });*/
             
 });
 
@@ -232,3 +192,13 @@ function confirmSingleAction(url, id) {
         }
     });	
 }
+/*
+function initDatebox() {
+    $("input[data-role=datebox]").each(function() {
+        $(this).scroller({preset: 'date', theme: 'jqm', mode: 'scroller', lang: 'es'});
+        $(this).attr("readonly", true);
+    });
+    $("input[data-role=datebox]").on('click', function() {
+        $(this).scroller('show');
+    });    
+}*/

@@ -24,7 +24,7 @@
                 <li>
                 <div data-role="fieldcontain">
                     <label for="date">Fecha:</label>
-                    <input type="date" data-role="datebox" value="{% if payment %}{{payment.date|date:"d/m/Y"}}{%else%}{% now "d/m/Y" %}{%endif%}" name="date" id="date" data-options='{"buttonTheme": "b", "disableManualInput": true}' />
+                    <input type="date" data-role="datebox" value="{% if payment %}{{payment.date|date:"d/m/Y"}}{%else%}{% now "d/m/Y" %}{%endif%}" name="date" id="date" />
                 </div>
                 <div data-role="fieldcontain">
                     <label for="amount">Monto:</label>
