@@ -21,7 +21,7 @@ from common.view.decorators import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax
+from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment
 import datetime
 from django.db.models import Sum
 
@@ -76,9 +76,13 @@ def loans_payments(request, id):
     return {"loan": l, "total": l.amount - l.remain}
 
 @render('mobile/loans_payments_add.html')
-def loans_payments_add(request, id):
+def loans_payments_add(request, id, pId = None):
     l = Loan.objects.get(pk=id)
-    return {"loan": l}
+    if pId:
+        p = Payment.objects.get(pk=pId)
+    else:
+        p = None
+    return {"loan": l, "payment": p}
 
 @render('mobile/loans_add.html')
 def loans_add(request, id):

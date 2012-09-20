@@ -17,9 +17,10 @@
 
 	<div data-role="content">	
 		<ul data-role="listview" data-split-icon="plus" data-split-theme="e" data-inset="true">
-			<li data-role="list-divider">{{person.name}}<span class="ui-li-count">Total: ${{total|floatformat:2}}</span></li>
+			<li data-role="list-divider">{{person.name}}<span class="ui-li-count" id="total-holder" total-value="{{total|floatformat:2}}" total-prefix="Total: $">Total: ${{total|floatformat:2}}</span></li>
 			{% for loan in list %}
 			<li swipe-options='{"direction": "left", "buttons": [{"style": "e", "value": "Editar", "href": "{% url mobile:expenses_edit loan.id %}"}]}'>
+				<input type="checkbox" summatory="{{loan.remain|floatformat:2}}"/>
 				<a href="{% url mobile:loans_payments loan.id %}">
 				<span class="ui-li-count" style="top: 15px;">{{loan.date}}</span>
 				<span class="ui-li-aside" style="margin-top: 30px; ">Resto: ${{loan.remain|floatformat:2}}</span>

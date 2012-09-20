@@ -92,6 +92,8 @@ ENABLE_RECORD = True
 
 ROOT_URLCONF = 'urls'
 
+LANGUAGE_CODE = 'es'
+
 try:
     execfile(os.path.join(PROJECT_PATH,'settings_local.py'))
 except IOError:

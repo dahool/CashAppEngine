@@ -50,3 +50,9 @@ label.ui-input-text, label.ui-select {
 .menu-element.tax {
 	background: url(images/icons/tax-icon.png) no-repeat top left;
 }
+.ui-text-red {
+	color: #FF0000;
+}
+#total-holder.ui-text-red {
+	cursor: pointer;
+}

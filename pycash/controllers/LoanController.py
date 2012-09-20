@@ -32,7 +32,7 @@ except:
     import pycash.exceptions as _mysql_exceptions
 from pycash.decorators import json_response
 
-from django.core import validators
+from pycash.validators import validate_amount
 from django.core.exceptions import ValidationError
 
 from pycash.controllers.PaymentController import getPaymentRemain
@@ -91,14 +91,13 @@ def process_request(request):
     req = request.REQUEST
     p = Person(pk=req['person.id'])
 
-    number = validators.RegexValidator('^([0-9])+(\.[0-9]{1,2})?$', code=_('Amount'))
     amount=req['amount']
     #validate amount
-    number(amount)
+    validate_amount(amount)
     
     reason=req['reason']
     if not reason or reason.strip() == '':
-        raise ValidationError(_('Required'), code=_('Reason'))
+        raise ValidationError(_('Reason is required.'), code='required')
         
     date=DateService.parseDate(req['date'])
     

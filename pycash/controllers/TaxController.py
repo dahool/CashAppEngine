@@ -37,6 +37,7 @@ from pycash.services.Utils import show_sql, get_logger
 import sys
 from pycash.decorators import json_response
 from django.core.exceptions import ValidationError
+from pycash.validators import validate_amount
 
 @render('cash/tax/index.html')
 def index(request):
@@ -95,9 +96,9 @@ def save_or_update(request):
 
     safe = True
     if e.id:
-        data = '{"success":true, "msg": "%s"}' % (_('Updated Service <b>%(service)s</b>') % {'service':e.service})   
+        data = '{"success":true, "msg": "%s"}' % (_('Updated Service <b>%(service)s</b>.') % {'service':e.service})   
     else:
-        data = '{"success":true, "msg": "%s"}' % (_('Created Tax for Service <b>%(service)s</b>') % {'service':e.service})    
+        data = '{"success":true, "msg": "%s"}' % (_('Created Tax for Service <b>%(service)s</b>.') % {'service':e.service})    
     try:
         elem = e.save()
     except _mysql_exceptions.Warning:
@@ -170,11 +171,11 @@ def fromParams(req):
     try:
         s = SubCategory.objects.get(pk=req['subCategory.id'])
     except SubCategory.DoesNotExist:
-        raise ValidationError(_('Select a valid category'))
+        raise ValidationError(_('Select a valid category.'))
     try:
         p = PaymentType.objects.get(pk=req['paymentType.id'])
     except (PaymentType.DoesNotExist, KeyError):
-        raise ValidationError(_('Select a valid payment type'))
+        raise ValidationError(_('Select a valid payment type.'))
 
     if param_exist("id",req):
         e = Tax.objects.get(pk=req['id'])
@@ -182,7 +183,10 @@ def fromParams(req):
         e = Tax()
         
     e.service=req['service']
-    e.amount=req['amount']
+    amount=req['amount']
+    validate_amount(amount)
+    e.amount = amount
+
     e.expire=DateService.parseDate(req['expire'])
     if param_exist("nextExpire",req):
         e.nextExpire=DateService.parseDate(req['nextExpire'])
@@ -204,13 +208,18 @@ def pay(request):
         else:
             e.expire = e.nextExpire
         if not e.expire:
-            return '{"success":false, "msg": "%s"}' % ("Ingrese próximo vencimiento.")
+            return '{"success":false, "msg": "%s"}' % _("Enter next expire date.")
             
         if param_exist("nextExpire2",req):
             e.nextExpire = DateService.parseDate(req['nextExpire2'])
         else:
             e.nextExpire = None
-        e.amount = req['amount']
+        amount = req['amount']
+        try:
+            validate_amount(amount)
+        except ValidationError, e:
+            return '{"success":false, "msg": "%s"}' % ("".join(e.messages))
+        e.amount = amount
         e.lastPay = DateService.todayDate()
         if e.account=="":
             service = e.service

@@ -31,7 +31,7 @@ except:
     import pycash.exceptions as _mysql_exceptions
 from pycash.decorators import json_response
 
-from django.core import validators
+from pycash.validators import validate_amount
 from django.core.exceptions import ValidationError
 
 @render('cash/expense/index.html')
@@ -173,23 +173,22 @@ def list(request):
 
 def fromParams(req):
     if not req['date']:
-        raise ValidationError(_('Enter a valid date'))
+        raise ValidationError(_('Enter a valid date.'))
         
     amount = req['amount']
-    number = validators.RegexValidator('^-?([0-9])+(\.[0-9]{1,2})?$', message=_('Enter a valid amount'))
-    number(amount)
+    validate_amount(amount)
     
     if not amount or float(amount) == 0.0:
-        raise ValidationError(_('Enter a valid amount'))
+        raise ValidationError(_('Enter a valid amount.'))
 
     try:
         s = SubCategory.objects.get(pk=req['subCategory.id'])
     except SubCategory.DoesNotExist:
-        raise ValidationError(_('Select a valid category'))
+        raise ValidationError(_('Select a valid category.'))
     try:
         p = PaymentType.objects.get(pk=req['paymentType.id'])
     except (PaymentType.DoesNotExist, KeyError):
-        raise ValidationError(_('Select a valid payment type'))
+        raise ValidationError(_('Select a valid payment type.'))
         
     if param_exist("text",req):
         text = req['text']
@@ -217,11 +216,10 @@ def save_or_update(request):
         data = '{"success":false, "msg": "%s"}' % ("".join(e.messages))
         return data
         
-    data = '{"success":true}'
-    #if e.id:
-        #data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> for <b>%(date)s</b>') % {'text':e.text,'date':req['date']})
-    #else:
-        #data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> for <b>%(date)s</b>') % {'text':e.text,'date':req['date']})
+    if e.id:
+        data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> for <b>%(date)s</b>.') % {'text':e.text,'date':req['date']})
+    else:
+        data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> for <b>%(date)s</b>.') % {'text':e.text,'date':req['date']})
         
     try:
         e.save()

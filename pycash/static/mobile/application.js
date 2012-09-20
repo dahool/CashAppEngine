@@ -49,7 +49,8 @@ $(function() {
                 $(this).removeClass('ui-btn-active');
             }
             else $(this).val("");
-        });         
+        });
+        summatory();
     });
 
 // force certain pages to be refreshed every time. mark such pages with
@@ -83,6 +84,33 @@ $(function() {
     });*/
             
 });
+
+function resetHolder() {
+    $this=$("#total-holder");
+    $this.removeClass('ui-text-red');
+    $this.html($this.attr('total-prefix')+$this.attr('total-value'));    
+}
+
+function summatory() {
+    $("input[type=checkbox][summatory]").attr('checked',false);
+    resetHolder();
+    $("input[type=checkbox][summatory]:visible").on('change', function() {
+       var total = 0;
+       var $holder = $("#total-holder");
+       $("input[type=checkbox][summatory]:checked").each(function() {
+           total = total + parseFloat($(this).attr('summatory'));
+       });
+       if (total == 0) {
+           resetHolder();
+       } else {
+           if (!$holder.hasClass('ui-text-red')) $holder.addClass('ui-text-red');
+           $holder.html($holder.attr('total-prefix')+total);
+       }
+    });
+    $("#total-holder").on('click', function() {
+        resetHolder();
+    });
+} 
 
 function doPostAction(url, data, elem, rte) {
     $.ajax({
