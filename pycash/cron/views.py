@@ -26,7 +26,7 @@ import StringIO
 import gzip
 from pycash.services import RequestUtils
 from pycash.services.Utils import logger
-from django.core.mail import mail_admins
+from django.core.mail import mail_managers as send_mail
 
 @json_response
 def backup(request):
@@ -49,7 +49,7 @@ def backup(request):
         error = ''
     except Exception, e:
         logger.error(str(e))
-        mail_admins("EXPORT ERROR", 'Processing %s.\n\nError: %s' % (today.strftime("%Y-%m-%d"), str(e)))
+        send_mail("EXPORT ERROR", 'Processing %s.\n\nError: %s' % (today.strftime("%Y-%m-%d"), str(e)))
         error=str(e)
     return {'processed': today.strftime("%Y-%m-%d"), 'sync': records.count(), 'error': error}
 
