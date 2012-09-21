@@ -19,6 +19,7 @@ DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
 AUTOLOAD_SITECONF = 'indexes'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
+USE_TZ = True
 
 SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 

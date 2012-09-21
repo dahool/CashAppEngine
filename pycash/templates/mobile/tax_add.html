@@ -54,7 +54,7 @@
                 </div>         
                 <div data-role="fieldcontain">
                     <label for="category">Categor&iacute;a:</label>
-                    <select name="subCategory.id" id="category" data-overlay-theme="b" data-native-menu="false">
+                    <select name="subCategory.id" id="category" data-overlay-theme="b">
                     	<option data-placeholder='true' value="0">Categor&iacute;a</option>
                     {% regroup categoryList by category.name as category_list %}
 					{% for category in category_list %}

@@ -6,6 +6,7 @@ $(function() {
         $.mobile.loader.prototype.options.html = "";
         $.mobile.page.prototype.options.domCache = true;
         $.mobile.transitionFallbacks.slideout = "none";
+        //$.mobile.selectmenu.prototype.options.nativeMenu = false;
       });
     
     $(document).on("pageinit", function(){
@@ -54,13 +55,15 @@ $(function() {
 });
 
 function resetHolder() {
+    $("input[type=checkbox][summatory]").attr('checked',false);
     $this=$("#total-holder");
     $this.removeClass('ui-text-red');
-    $this.html($this.attr('total-prefix')+$this.attr('total-value'));    
+    $this.html($this.attr('total-prefix')+$this.attr('total-value'));
+    $("div.ui-checkbox").find('.ui-icon-checkbox-on').addClass('ui-icon-checkbox-off').removeClass('ui-icon-checkbox-on');
+    $("div.ui-checkbox").find('.ui-checkbox-on').addClass('ui-checkbox-off').removeClass('ui-checkbox-on');    
 }
 
 function summatory() {
-    $("input[type=checkbox][summatory]").attr('checked',false);
     resetHolder();
     $("input[type=checkbox][summatory]:visible").on('change', function() {
        var total = 0;
@@ -72,7 +75,7 @@ function summatory() {
            resetHolder();
        } else {
            if (!$holder.hasClass('ui-text-red')) $holder.addClass('ui-text-red');
-           $holder.html($holder.attr('total-prefix')+total);
+           $holder.html($holder.attr('total-prefix')+total.toFixed(2));
        }
     });
     $("#total-holder").on('click', function() {
