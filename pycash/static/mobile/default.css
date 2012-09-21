@@ -5,6 +5,9 @@
 .ui-li-divider {
     text-align: center;
 }
+.ui-page { 
+	-webkit-backface-visibility: hidden;
+}
 label.ui-input-text, label.ui-select {
 	font-weight: bold !important;
 }

@@ -5,6 +5,7 @@ $(function() {
         $.mobile.loader.prototype.options.theme = "a";
         $.mobile.loader.prototype.options.html = "";
         $.mobile.page.prototype.options.domCache = true;
+        $.mobile.transitionFallbacks.slideout = "none";
       });
     
     $(document).on("pageinit", function(){
