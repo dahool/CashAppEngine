@@ -7,7 +7,7 @@ import httplib
 import os
 import re
 import socket
-import ssl
+#import ssl
 import sys
 import urllib
 import urlparse
@@ -139,7 +139,8 @@ class RESTClientObject(object):
         # maintain dynamic lookup of ProperHTTPConnection
         http_connect = self.http_connect
         if http_connect is None:
-            http_connect = ProperHTTPSConnection
+            #http_connect = ProperHTTPSConnection
+            http_connect = httplib.HTTPSConnection
 
         host = urlparse.urlparse(url).hostname
         conn = http_connect(host, 443)
