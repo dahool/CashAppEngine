@@ -100,7 +100,7 @@ def save_or_update(request):
     else:
         data = '{"success":true, "msg": "%s"}' % (_('Created Tax for Service <b>%(service)s</b>.') % {'service':e.service})    
     try:
-        elem = e.save()
+        e.save()
     except _mysql_exceptions.Warning:
         pass
     except Exception, e1:
@@ -110,20 +110,24 @@ def save_or_update(request):
     if safe:
         if settings.USE_GOOGLE_CAL:
             try:
-                update_calendar(elem.id)
+                update_calendar(e.id)
             except Exception, e1:
-                pass
+                get_logger().error(str(e1))
             
     return data
 
 @transaction.autocommit
 def update_calendar(id):
+    get_logger().debug("Update calendar event %s" % id)
     tax = Tax.objects.get(pk=id)
     calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
     event = False
 
     if tax.gcalId != '':
-        event = calendar.get_event(tax.gcalId)
+        try:
+            event = calendar.get_event(tax.gcalId)
+        except Exception, e1:
+            get_logger().error(str(e1))        
 
     if event is False:
         event = googlecalendar.CalendarEvent(title=tax.service + ' [$ ' + str(tax.amount) + ']',
@@ -254,7 +258,7 @@ def pay(request):
             if settings.USE_GOOGLE_CAL:
                 # ADD TO CALENDAR
                 try:
-                    update_calendar(req['id'])
+                    update_calendar(e.id)
                 except Exception, e1:
                     pass        
         

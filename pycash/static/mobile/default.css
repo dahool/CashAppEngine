@@ -8,6 +8,20 @@
 .ui-page { 
 	-webkit-backface-visibility: hidden;
 }
+#popupPanel-popup {
+    right: auto !important;
+    left: 0 !important;
+}
+#popupPanel {
+    width: 200px;
+    border: 1px solid #000;
+    border-right: none;
+    background: rgba(0,0,0,.5);
+    margin: -1px 0;
+}
+#popupPanel .ui-btn {
+    margin: 2em 15px;
+}
 label.ui-input-text, label.ui-select {
 	font-weight: bold !important;
 }

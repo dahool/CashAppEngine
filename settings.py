@@ -88,7 +88,7 @@ else:
                  EXT_LOCATION + 'adapter/jquery/ext-jquery-adapter.js',
                  EXT_LOCATION + 'ext-all-debug.js']
                  
-USE_GOOGLE_CAL = False
+USE_GOOGLE_CAL = True
 ENABLE_RECORD = True
 
 ROOT_URLCONF = 'urls'

@@ -16,7 +16,7 @@
 	</div><!-- /header -->
 
 	<div data-role="content" data-return="back">
-        <form id="form-add-tax" action="{% url tax_save %}" after-submit-clean="form">
+        <form id="form-add-tax" action="{% url tax_save %}">
         	{% if tax %}
         		<input type="hidden" name="id" value="{{tax.id}}"/>
         	{% endif %}

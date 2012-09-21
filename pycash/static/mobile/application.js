@@ -39,6 +39,7 @@ $(function() {
             else $(this).val("");
         });
         summatory();
+        setupSideMenu();
     });
 
    // initDatebox();
@@ -63,6 +64,17 @@ function resetHolder() {
     $("div.ui-checkbox").find('.ui-checkbox-on').addClass('ui-checkbox-off').removeClass('ui-checkbox-on');    
 }
 
+function setupSideMenu() {
+    $( "#popupPanel" ).on({
+        popupbeforeposition: function() {
+            var h = $( window ).height();
+            $( "#popupPanel" ).css( "height", h );
+        }
+    });
+    $('body').on('swiperight', function() {
+        $( "#popupPanel" ).popup( "open" );
+    });
+}
 function summatory() {
     resetHolder();
     $("input[type=checkbox][summatory]:visible").on('change', function() {
@@ -177,10 +189,10 @@ function afterSubmit(elem, rte) {
 function confirmSingleAction(url, id) {
 	var $elem = $('div[data-role="content"]:visible');
 	var rte = $elem.attr("data-return");
-    $elem.simpledialog({
-        'mode' : 'bool',
-        'prompt' : "¿Confirma eliminación?",
-        'useModal': true,
+    $elem.simpledialog2({
+        'mode' : 'button',
+        'headerText' : " ",
+        'buttonPrompt': "¿Confirma eliminación?",
         'buttons' : {
           'Si': {
             click: function() {
