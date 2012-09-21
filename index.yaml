@@ -63,6 +63,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: pycash_storedtoken
+  properties:
+  - name: __key__
+    direction: desc
+
 - kind: sub_category
   properties:
   - name: __key__

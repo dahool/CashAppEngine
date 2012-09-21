@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "0.9.1"
+VERSION = "1.0.0"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0-rc.1"
 JQUERY_VERSION = "1.8.1"
@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',    
     'djangotoolbox',
     'dbindexer',
+    'adminplus',
     'pycash',
     # djangoappengine should come last, so it can override a few manage.py commands
     'djangoappengine',
@@ -88,7 +89,7 @@ else:
                  EXT_LOCATION + 'adapter/jquery/ext-jquery-adapter.js',
                  EXT_LOCATION + 'ext-all-debug.js']
                  
-USE_GOOGLE_CAL = True
+USE_GOOGLE_CAL = False
 ENABLE_RECORD = True
 
 ROOT_URLCONF = 'urls'

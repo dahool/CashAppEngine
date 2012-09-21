@@ -1,1 +1,10 @@
 cron:
+- description: weekly backup
+  url: /cron/backup/
+  schedule: every mon 0:00
+  timezone: America/Argentina/Buenos_Aires
+
+- description: update events
+  url: /cron/updateevent/
+  schedule: every 2 hours
+  timezone: America/Argentina/Buenos_Aires

@@ -29,5 +29,9 @@ handlers:
 - url: /media
   static_dir: pycash/static
   
+- url: /cron/.*
+  script: djangoappengine.main.application
+  login: admin
+  
 - url: /.*
   script: djangoappengine.main.application

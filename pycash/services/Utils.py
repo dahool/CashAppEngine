@@ -20,3 +20,4 @@ def get_logger():
         return logger
     return logging
     
+logger = get_logger()

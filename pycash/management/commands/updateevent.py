@@ -9,11 +9,11 @@ class Command(BaseCommand):
         if settings.USE_GOOGLE_CAL:
             from pycash.controllers.TaxController import update_calendar
             taxlist = Tax.objects.filter(updated=False)
-            self.stdout.write("%d items to update\n" % len(taxlist))
+            self.stdout.write("%d items to update.\n" % len(taxlist))
             a = 0
             for tax in taxlist:
                 if update_calendar(tax.id):
                     a+=1
-            self.stdout.write("%d items updated\n" % a)
+            self.stdout.write("%d items updated.\n" % a)
         else:
             self.stdout.write("Nothing to do.\n")

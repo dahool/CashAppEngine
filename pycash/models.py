@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 from pycash.services.ModelUtils import capFirst
 from django.conf import settings
     
+class StoredToken(models.Model):
+    token_key = models.CharField(max_length=255, db_index=True)
+    token_secret = models.CharField(max_length=255, db_index=True)
+    token = models.TextField()
+    updated = models.DateTimeField(auto_now_add=True, auto_now=True)
+ 
+    class Meta:
+        get_latest_by = "updated"
+        
 class AuthToken(models.Model):
     token = models.CharField(max_length=128, primary_key=True)
     token_key = models.CharField(max_length=5)
@@ -247,6 +256,7 @@ class SyncRecord(models.Model):
     class Meta:
         db_table = "syncrecord"
         verbose_name_plural = u'SyncRecords'
+        ordering = ("created",)
     
 record_sync_list = (Person, Income, PaymentType, Category, SubCategory, Tax, Expense, Loan, Payment)
 

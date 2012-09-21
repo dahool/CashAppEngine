@@ -18,3 +18,29 @@ class AuthTokenAdmin(admin.ModelAdmin):
     readonly_fields = ('token', 'token_key')
     
 admin.site.register(AuthToken, AuthTokenAdmin)
+
+from pycash.views import storeauthsetup
+admin.site.register_view('storedtoken', storeauthsetup, 'Store Service Tokens', 'storedtoken')
+
+#class StoredTokenForm(forms.ModelForm):
+#
+#    response = forms.CharField(required=False)
+#    
+#    def clean(self):
+#        cleaned_data = super(StoredTokenForm, self).clean()
+#        tkey = cleaned_data.get("token_key")
+#        tsecret = cleaned_data.get("token_secret")
+#        if tkey and tsecret:
+#            cleaned_data['response'] = "lalala"
+#            #raise forms.ValidationError("Did not send for 'help' in the subject despite CC'ing yourself.")
+#        return cleaned_data
+#    
+#    class Meta:
+#        model = StoredToken
+#        exclude = ('token',)
+#    
+#class StoredTokenAdmin(admin.ModelAdmin):
+#    form = StoredTokenForm
+#    readonly_fields = ('updated',)
+#    
+#admin.site.register(StoredToken, StoredTokenAdmin)

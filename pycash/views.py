@@ -22,6 +22,11 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.template import RequestContext
 from django.contrib.auth import views as auth_views
+from django import forms
+from django.utils.translation import ugettext as _
+from common.decorators import superuser_required
+from common.view.decorators import render
+from pycash.models import StoredToken
 
 @login_required
 def index(request):
@@ -40,3 +45,32 @@ def login(request, template_name='login.html'):
     if True or request.is_mobile:
         template_name="mobile/login.html"
     return auth_views.login(request, template_name)
+
+@superuser_required
+@render('admin/tokens.html')
+def storeauthsetup(request):
+    requrl = None
+    reqid = None
+    if request.method == 'POST':
+        from pycash.services.DropboxService import StorageService, OAuthToken
+        stService = StorageService()
+        session = stService.sess
+        if request.POST.get('reqid', None):
+            token = request.POST.get('reqid').split('|')
+            session.get_access_token(OAuthToken(*token))
+            session.link()
+        else:
+            requrl, token = session.get_access_token()
+            reqid = "|".join([token.key, token.secret])
+    elif request.GET.get('delete', None):
+        try:
+            s = StoredToken.objects.get(pk=request.GET.get('delete'))
+            s.delete()
+        except:
+            pass
+    tokens = StoredToken.objects.all()
+    return {'tokens': tokens, 'reqid': reqid, 'requrl': requrl}
+
+class StoredTokenForm(forms.Form):
+    token_key = forms.CharField(label=_('App Key'))
+    token_secret = forms.CharField(label=_('App Secret'))
