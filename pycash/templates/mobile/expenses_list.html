@@ -41,7 +41,7 @@
 	
 	<div data-role="popup" id="dateFilter" data-theme="a" class="ui-corner-all" data-history="false">
 		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Cerrar</a>
-		<form method='post' >
+		<form method="post" action="{% url mobile:expenses_list %}" data-history="false">
 			<div style="padding:10px 20px;">
               <label for="fromDate">Desde:</label>
               <input type="date" data-role="datebox" value="{{filterStart|date:"d/m/Y"}}" name="fromDate" id="fromDate" />
