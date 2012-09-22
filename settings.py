@@ -18,6 +18,8 @@ DATABASES['native'] = DATABASES['default']
 DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
 AUTOLOAD_SITECONF = 'indexes'
 
+EMAIL_QUEUE_NAME='mail-queue'
+
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_TZ = True
 
@@ -59,7 +61,7 @@ AUTHENTICATION_BACKENDS = ('pycash.auth.backends.RemoteTokenBackend',
                          'django.contrib.auth.backends.ModelBackend',)
                                
 LOGIN_URL = '/login'
-#LOGIN_EXEMPT_URLS = '/api'
+LOGIN_EXEMPT_URLS = '/cron' # this auth is managed by appengine
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 

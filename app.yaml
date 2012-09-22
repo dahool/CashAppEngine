@@ -24,7 +24,7 @@ handlers:
 
 - url: /media/admin
   static_dir: django/contrib/admin/media
-  expiration: '0'
+  expiration: '1d'
 
 - url: /media
   static_dir: pycash/static
@@ -32,6 +32,10 @@ handlers:
 - url: /cron/.*
   script: djangoappengine.main.application
   login: admin
+  
+- url: /(.*\.(gif|png|jpg))
+  static_dir: pycash/static/images
+  expiration: '1d'
   
 - url: /.*
   script: djangoappengine.main.application

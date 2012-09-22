@@ -2,13 +2,14 @@ from django.core.management.base import BaseCommand, CommandError
 from pycash.services.ExportService import ExportService
 from optparse import make_option
 from pycash.models import *
+from django.conf import settings
 import datetime
 
 class Command(BaseCommand):
     help = 'Export Data'
     db = 'export'
-    chunks = 50
-    expense_filter = "2012-09-01"
+    chunks = getattr(settings, 'EXPORT_CHUNK_SIZE',50)
+    expense_filter = getattr(settings, 'EXPORT_EXPENSE_DATE','2012-09-01')
     
     option_list = BaseCommand.option_list + (
         make_option('--username', dest='username', default=None, help='Specifies authorized Username.'),
