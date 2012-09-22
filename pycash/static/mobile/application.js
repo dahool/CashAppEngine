@@ -9,6 +9,10 @@ $(function() {
         //$.mobile.selectmenu.prototype.options.nativeMenu = false;
       });
     
+    $(document).on('popupafteropen', '#dateFilter', function(event, ui) {
+         $("div#dateFilter-screen.ui-popup-screen").unbind('vclick');
+     });
+    
     $(document).on("pageinit", function(){
         $('[form-submit]').unbind('click').on("click",function() {
             var frm = $(this).attr('form-submit');

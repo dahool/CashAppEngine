@@ -22,7 +22,7 @@
                 {% for item in group.list %}
                 <li swipe-options='{"direction": "left", "buttons": [{"style": "r", "value": "Borrar", "href": "javascript:confirmSingleAction(\"{% url expenses_delete %}\",\"{{item.id}}\")"},{"style": "e", "value": "Editar", "href": "{% url mobile:expenses_edit item.id %}"}]}'>
                     <div>
-                        <h3>{{item.text}}</h3>            
+                        <h3>{{item.text}} ({{item.subCategory.name}})</h3>            
                         <p>{{item.paymentType.name}}</p>
                         <span class="ui-li-aside">${{item.amount|floatformat:2}}</span>
                     </div>
@@ -31,12 +31,32 @@
             {% endfor %}
         </ul>
 	</div><!-- /content -->
-<!--
-	<div data-role="footer" data-theme="c" class="ui-bar"> 
-		<a href="#" data-icon="refresh" data-theme="a" data-cache="false">Actualizar</a> 
-	</div> 
--->	
-	{% include "mobile/footer.html" %}
+
+	<div data-role="footer" class="ui-bar" data-id="footer" data-position="fixed" data-tap-toggle="false">
+		<div class="ui-grid-a">
+			<div class="ui-block-a"><a href="{% url mobile:home %}" data-role="button" data-icon="home" data-iconpos="notext" data-mini="true"></a></div>
+			<div class="ui-block-b"><a data-theme="a" href="#dateFilter" data-rel="popup" data-role="button" data-corners="false" data-iconpos="right" data-mini="true" data-icon="gear" data-inline="true">{{filterStart|date:"d-m-Y"}} | {{filterEnd|date:"d-m-Y"}}</a></div>	   
+		</div>	
+	</div>
+	
+	<div data-role="popup" id="dateFilter" data-theme="a" class="ui-corner-all" data-history="false">
+		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Cerrar</a>
+		<form method='post' >
+			<div style="padding:10px 20px;">
+              <label for="fromDate">Desde:</label>
+              <input type="date" data-role="datebox" value="{{filterStart|date:"d/m/Y"}}" name="fromDate" id="fromDate" />
+              <label for="toDate">Hasta:</label>
+              <input type="date" data-role="datebox" value="{{filterEnd|date:"d/m/Y"}}" name="toDate" id="toDate" />                
+	    	  <button type="submit" data-theme="b" data-icon="check">Aplicar</button>
+			</div>
+		</form>
+	</div>
+			
+	<div data-role="popup" id="popupPanel" data-corners="false" data-theme="none" data-shadow="false" data-tolerance="0,0" data-history="false">
+	    <a href="{% url mobile:expenses %}" data-role="button" data-theme="a" data-mini="true">Gastos</a>
+	    <a href="{% url mobile:loans %}" data-role="button" data-theme="a" data-mini="true">Pr&eacute;stamos</a>
+	    <a href="{% url mobile:tax %}" data-role="button" data-theme="a" data-mini="true">Impuestos</a>
+	</div>
 	
 </div><!-- /page -->
 {% endblock %}

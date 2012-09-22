@@ -24,6 +24,7 @@ from django.conf import settings
 from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment
 import datetime
 from django.db.models import Sum
+from pycash.services import DateService, RequestUtils
 
 @render('mobile/expenses_frm.html')
 def expensesAdd(request, id = None):
@@ -42,11 +43,22 @@ def expensesAdd(request, id = None):
 
 @render('mobile/expenses_list.html')
 def expensesList(request):
-    q = Expense.objects.filter(date__lte = datetime.datetime.now()).exclude(date__lt = datetime.datetime.now() - datetime.timedelta(days=5))
+    req = request.POST
+    if RequestUtils.param_exist("toDate", req):
+        toDate = DateService.parseDate(req['toDate'])
+    else:
+        toDate = datetime.datetime.now()
+    if RequestUtils.param_exist("fromDate", req):
+        fromDate = DateService.parseDate(req['fromDate'])
+    else:
+        fromDate = toDate - datetime.timedelta(days=5)  
+    q = Expense.objects.filter(date__gte = DateService.midNight(fromDate), date__lte = DateService.midNight(toDate, True))
     q = q.order_by("-date")
     return {"settings": settings,
             "list": q,
-            "today": datetime.date.today()}
+            "today": datetime.date.today(),
+            "filterStart": fromDate,
+            "filterEnd": toDate}
 
 @render('mobile/loans.html')
 def loansHome(request):

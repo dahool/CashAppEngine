@@ -33,6 +33,14 @@ handlers:
   script: djangoappengine.main.application
   login: admin
   
+- url: /favicon.ico
+  static_files: pycash/static/images/favicon.ico
+  upload: pycash/static/images/favicon.ico
+
+- url: /robots.txt
+  static_files: pycash/static/robots.txt
+  upload: pycash/static/robots.txt
+  
 - url: /(.*\.(gif|png|jpg))
   static_dir: pycash/static/images
   expiration: '1d'

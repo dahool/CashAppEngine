@@ -38,11 +38,13 @@ def getDate(d):
         return d.date()
     return datetime.date(d.tm_year, d.tm_mon, d.tm_mday)
 
-def midNight(date):
+def midNight(date, rev=False):
     if isinstance(date,datetime.date):
         dt = date.timetuple()
     else:
         dt = date
+    if rev:
+        return datetime.datetime(dt.tm_year, dt.tm_mon, dt.tm_mday, 23, 59,59)
     return datetime.datetime(dt.tm_year, dt.tm_mon, dt.tm_mday, 0, 0,0)
     
 def today():
