@@ -97,9 +97,13 @@ def loans_payments_add(request, id, pId = None):
     return {"loan": l, "payment": p}
 
 @render('mobile/loans_add.html')
-def loans_add(request, id):
+def loans_add(request, id, loanId = None):
     p = Person.objects.get(pk=id)
-    return {"person": p}
+    if loanId:
+        l = Loan.objects.get(pk=loanId)
+    else:
+        l = None
+    return {"person": p, "loan": l}
    
 @render('mobile/tax.html') 
 def taxHome(request):

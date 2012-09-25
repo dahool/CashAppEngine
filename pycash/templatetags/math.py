@@ -21,3 +21,10 @@ from django.template.defaultfilters import register
 @register.filter
 def divide(value, arg):
     return float(value) / float(arg)
+
+@register.filter('sumlist')
+def sumList(value, arg):
+    total = 0
+    for item in value:
+        total += getattr(item, arg)
+    return total 

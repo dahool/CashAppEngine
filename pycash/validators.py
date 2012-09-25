@@ -20,4 +20,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 
-validate_amount = validators.RegexValidator('^([0-9])+(\.[0-9]{1,2})?$', _(u'Enter a valid amount.'), 'invalid')
+validate_amount = validators.RegexValidator('^[-]{0,1}([0-9])+(\.[0-9]{1,2})?$', _(u'Enter a valid amount.'), 'invalid')
