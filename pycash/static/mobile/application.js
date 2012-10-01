@@ -13,7 +13,7 @@ $(function() {
         $.mobile.loader.prototype.options.textVisible = true;
         $.mobile.loader.prototype.options.theme = "a";
         $.mobile.loader.prototype.options.html = "";
-        $.mobile.page.prototype.options.domCache = true;
+        $.mobile.page.prototype.options.domCache = false;
         $.mobile.transitionFallbacks.slideout = "none";
         if (get_android_version() < 3) {
             $.mobile.selectmenu.prototype.options.nativeMenu = false;  
