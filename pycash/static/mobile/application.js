@@ -1,26 +1,44 @@
+function get_android_version() {
+    var andpat = /[;(\s]Android (\d+(?:\.\d+)+)[;)]/;
+    var res = andpat.exec(navigator.userAgent);
+    if (res != null) {
+        return parseFloat(res[1]);
+    }
+    return 999;
+}
+
 $(function() {
-    $( document ).bind( 'mobileinit', function(){
+    $(window.document).on("mobileinit", function(){
         $.mobile.loader.prototype.options.text = "Cargando...";
         $.mobile.loader.prototype.options.textVisible = true;
         $.mobile.loader.prototype.options.theme = "a";
         $.mobile.loader.prototype.options.html = "";
         $.mobile.page.prototype.options.domCache = true;
         $.mobile.transitionFallbacks.slideout = "none";
-        //$.mobile.selectmenu.prototype.options.nativeMenu = false;
-      });
+        if (get_android_version() < 3) {
+            $.mobile.selectmenu.prototype.options.nativeMenu = false;  
+        }
+        $('body').show();
+    });
     
     $(document).on('popupafteropen', '#dateFilter', function(event, ui) {
          $("div#dateFilter-screen.ui-popup-screen").unbind('vclick');
-     });
+    });
     
     $(document).on("pageinit", function(){
-        $('[form-submit]').unbind('click').on("click",function() {
+        if (get_android_version() < 3) {
+            $.mobile.selectmenu.prototype.options.nativeMenu = false;  
+        }
+        
+        $('[form-submit]').on("click",function() {
+            $(this).hide();
+            $elem = $(this);
             var frm = $(this).attr('form-submit');
             var rte = false;
             if ($(this).attr('return')) {
             	rte = $(this).attr('return');
             }
-            doPostAction($(frm).attr('action'), $(frm).serialize(), frm, rte);
+            doPostAction($(frm).attr('action'), $(frm).serialize(), frm, rte, function() {$elem.show()});
             return false;
         });
         $("[data-role=header]").fixedtoolbar({ tapToggle: false });
@@ -29,6 +47,7 @@ $(function() {
     $(document).on("dateboxbeforecreate", function() {
         $.mobile.datebox.prototype.options.lang = 'es';
         $.mobile.datebox.prototype.options.disableManualInput = true;
+        $.mobile.datebox.prototype.options.mode = 'mixed';
     })
     
     $(document).on("pageshow", function(){
@@ -99,7 +118,7 @@ function summatory() {
     });
 } 
 
-function doPostAction(url, data, elem, rte) {
+function doPostAction(url, data, elem, rte, callback) {
     $.ajax({
         type: 'POST',
         url: url,
@@ -109,6 +128,7 @@ function doPostAction(url, data, elem, rte) {
         },
         complete: function(r,s) {
             $.mobile.hidePageLoadingMsg();
+            if (callback != undefined) callback();
         },
         success: function(data) {
         	if (data.success) {
@@ -118,19 +138,6 @@ function doPostAction(url, data, elem, rte) {
                         'onClose': function() {
                             afterSubmit(elem, rte);
                         }});            	    
-            	    /*
-                    $(elem).simpledialog({
-                        'mode' : 'bool',
-                        'prompt' : data.msg,
-                        'useModal': true,
-                        'buttons' : {
-                          'OK': {
-                            click: function() {
-                            	afterSubmit(elem, rte);
-                            }
-                        }
-                    }
-                    });*/
             	}  else {
                     afterSubmit(elem, rte);
                 }
@@ -142,20 +149,6 @@ function doPostAction(url, data, elem, rte) {
         	                            $("[field-focus=true]").focus();
         	                        }});
         	    }
-            	/*if (data.msg) {
-                    $(elem).simpledialog({
-                        'mode' : 'bool',
-                        'prompt' : data.msg,
-                        'useModal': true,
-                        'buttons' : {
-                          'OK': {
-                            click: function() {
-                            	$("[field-focus=true]").focus();
-                    		}
-                            }
-                        }
-                    });
-            	} */       		
         	}
         },
         dataType: "json"
@@ -197,6 +190,7 @@ function confirmSingleAction(url, id) {
         'mode' : 'button',
         'headerText' : " ",
         'buttonPrompt': "¿Confirma eliminación?",
+        'animate': false,
         'buttons' : {
           'Si': {
             click: function() {
@@ -222,3 +216,15 @@ function initDatebox() {
         $(this).scroller('show');
     });    
 }*/
+
+jQuery.cachedScript = function(url, options) {
+    // allow user to set any option except for dataType, cache, and url
+    options = $.extend(options || {}, {
+      dataType: "script",
+      cache: true,
+      url: url
+    });
+    // Use $.ajax() since it is more flexible than $.getScript
+    // Return the jqXHR object so we can chain callbacks
+    return jQuery.ajax(options);
+};

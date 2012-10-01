@@ -45,10 +45,15 @@ function createSwipeMenu() {
 			var $divSwipe = $('<div class="divSwipe"></div>');
 			$li.prepend($divSwipe);
 			$.each(opts.buttons, function(index, obj) {
-				var $b = $('<a>'+obj.value+'</a>').attr({
-					'class': 'aSwipeBtn ui-btn-up-'+obj.style,
-					'href': obj.href
-				});
+	             var $b = $('<a>'+obj.value+'</a>').attr({
+	                    'class': 'aSwipeBtn ui-btn-up-'+obj.style,
+	             });
+			    if ("javascript:" == obj.href.substring(0,11)) {
+			        var func = obj.href.substring(11);
+			        $b.on('click', function(){eval(func)});
+			    } else {
+					$b.attr('href', obj.href);
+			    }
 				$divSwipe.prepend($b);	
 			});
 			// insert buttons into divSwipe

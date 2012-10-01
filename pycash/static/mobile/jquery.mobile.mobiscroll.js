@@ -40,24 +40,22 @@ $.widget( "mobile.datebox", $.mobile.widget, {
         if (o.disableManualInput) $(input).attr("readonly", true);
     },
 });
-$(document).bind(
-        "pagebeforecreate",
-        function(c) {
+$(document).on("pagebeforecreate", function(c) {
             $(":jqmData(role='datebox')", c.target).each(
                     function() {
                         $(this).replaceWith(
                                 $("<div>").html($(this).clone()).html()
                                         .replace(/\s+type=["']date['"]?/,
                                                 ' type="text" '))
-                    })
-        });
-$(document).bind("pagecreate create", function(c) {
+            })
+});
+$(document).on("pagecreate", function(c) {
     $(document).trigger("dateboxbeforecreate");
     $(":jqmData(role='datebox')", c.target).each(function() {
         if (typeof ($(this).data("datebox")) === "undefined") {
             $(this).datebox();
         }
     })
-})
+});
 })( jQuery );
 
