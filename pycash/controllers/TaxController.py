@@ -118,25 +118,36 @@ def save_or_update(request):
 
 @transaction.autocommit
 def update_calendar(id):
-    get_logger().debug("Update calendar event %s" % id)
+    get_logger().info("Update calendar event %s" % id)
     tax = Tax.objects.get(pk=id)
     calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
-    event = False
+    #event = False
 
     if tax.gcalId != '':
         try:
             event = calendar.get_event(tax.gcalId)
+            calendar.delete_event(event)
         except Exception, e1:
             get_logger().error(str(e1))        
 
-    if event is False:
-        event = googlecalendar.CalendarEvent(title=tax.service + ' [$ ' + str(tax.amount) + ']',
-                                             start_date=DateService.getDate(tax.expire),
-                                             description=tax.account)
-    else:
-        event.set_title(tax.service + ' [$ ' + str(tax.amount) + ']')
-        event.set_start_date(DateService.getDate(tax.expire))
-        event.set_description(tax.account)
+    event = googlecalendar.CalendarEvent(title=tax.service + ' [$ ' + str(tax.amount) + ']',
+                                         start_date=DateService.getDate(tax.expire),
+                                         description=tax.account)
+        
+#    if tax.gcalId != '':
+#        try:
+#            event = calendar.get_event(tax.gcalId)
+#        except Exception, e1:
+#            get_logger().error(str(e1))        
+#
+#    if event is False:
+#        event = googlecalendar.CalendarEvent(title=tax.service + ' [$ ' + str(tax.amount) + ']',
+#                                             start_date=DateService.getDate(tax.expire),
+#                                             description=tax.account)
+#    else:
+#        event.set_title(tax.service + ' [$ ' + str(tax.amount) + ']')
+#        event.set_start_date(DateService.getDate(tax.expire))
+#        event.set_description(tax.account)
         
     try:
         ev = calendar.save_event(event)
