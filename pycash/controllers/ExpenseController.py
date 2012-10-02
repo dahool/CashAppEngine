@@ -217,9 +217,9 @@ def save_or_update(request):
         return data
         
     if e.id:
-        data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> for <b>%(date)s</b>.') % {'text':e.text,'date':req['date']})
+        data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> [<b>%(date)s</b>].') % {'text':e.text,'date':req['date']})
     else:
-        data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> for <b>%(date)s</b>.') % {'text':e.text,'date':req['date']})
+        data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> [<b>%(date)s</b>].') % {'text':e.text,'date':req['date']})
         
     try:
         e.save()

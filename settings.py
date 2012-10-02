@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0-rc.2"
 JQUERY_VERSION = "1.8.1"
@@ -22,6 +22,7 @@ EMAIL_QUEUE_NAME='mail-queue'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_TZ = True
+TZ_OFFSET = -180
 
 SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 

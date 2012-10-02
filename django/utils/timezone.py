@@ -52,13 +52,17 @@ class LocalTimezone(tzinfo):
     having trouble with this class, don't waste your time, just install pytz.
     """
 
-    def __init__(self):
+    def __init__(self, offset=None):
         # This code is moved in __init__ to execute it as late as possible
         # See get_default_timezone().
-        self.STDOFFSET = timedelta(seconds=-_time.timezone)
-        if _time.daylight:
-            self.DSTOFFSET = timedelta(seconds=-_time.altzone)
+        if offset is None:
+            self.STDOFFSET = timedelta(seconds=-_time.timezone)
+            if _time.daylight:
+                self.DSTOFFSET = timedelta(seconds=-_time.altzone)
+            else:
+                self.DSTOFFSET = self.STDOFFSET
         else:
+            self.STDOFFSET = timedelta(minutes=offset)
             self.DSTOFFSET = self.STDOFFSET
         self.DSTDIFF = self.DSTOFFSET - self.STDOFFSET
         tzinfo.__init__(self)
@@ -111,7 +115,7 @@ def get_default_timezone():
         if isinstance(settings.TIME_ZONE, basestring) and pytz is not None:
             _localtime = pytz.timezone(settings.TIME_ZONE)
         else:
-            _localtime = LocalTimezone()
+            _localtime = LocalTimezone(getattr(settings, 'TZ_OFFSET', None))
     return _localtime
 
 # This function exists for consistency with get_current_timezone_name
