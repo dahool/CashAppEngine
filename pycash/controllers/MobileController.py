@@ -90,11 +90,15 @@ def loans_payments(request, id):
 @render('mobile/loans_payments_add.html')
 def loans_payments_add(request, id, pId = None):
     l = Loan.objects.get(pk=id)
+    amount = None
     if pId:
         p = Payment.objects.get(pk=pId)
     else:
         p = None
-    return {"loan": l, "payment": p}
+        amount = l.amount / l.instalments
+        if amount > l.remain:
+            amount = l.remain
+    return {"loan": l, "payment": p, "remain": amount}
 
 @render('mobile/loans_add.html')
 def loans_add(request, id, loanId = None):

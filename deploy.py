@@ -21,12 +21,24 @@ def update_version():
     fileout.close()
     out.close()
 
+def prompt_continue():
+    if getattr(settings,'APP_ID',False):
+        s = "Deploy version %s on %s?" % (settings.VERSION, settings.APP_ID)
+    else:    
+        s = "Deploy version %s on default app?" % settings.VERSION
+    
+    r = raw_input(s + " (Y/n): ")
+    return not r or r == '' or r.lower() == 'y'
+    
 def main():
     update_version()
-    if settings.APP_ID:
-        os.system('appcfg.py update . -A %s ' % settings.APP_ID)
-    else:
-        os.system('appcfg.py update .')
-    
+    if prompt_continue():
+        cmd = 'appcfg.py update .'
+        if getattr(settings,'APP_ID',False):
+            cmd += ' -A %s' % settings.APP_ID
+        if getattr(settings, 'APP_USER',False):
+            cmd += ' --email=%s' % settings.APP_USER
+        os.system(cmd)
+        
 if __name__ == '__main__':
     main()

@@ -29,7 +29,7 @@
                 </div>
                 <div data-role="fieldcontain">
                     <label for="amount">Monto:</label>
-                    <input field-focus="true" type="number" name="amount" id="amount" value="{% if payment %}{{payment.amount}}{%else%}{% if loan.instalments > 1 %}{{loan.amount|divide:loan.instalments|floatformat:2}}{%else%}{{loan.amount}}{% endif %}{%endif%}"/>
+                    <input field-focus="true" type="number" name="amount" id="amount" value="{% if payment %}{{payment.amount}}{%else%}{{remain|floatformat:2}}{%endif%}"/>
                 </div>
                 </li>
             </ul>
