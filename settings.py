@@ -9,8 +9,8 @@ PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = "1.0.3"
 APPLICATION = "Cash Manager"
-MOBILE_VERSION = "1.2.0-rc.2"
-JQUERY_VERSION = "1.8.1"
+MOBILE_VERSION = "1.2.0"
+JQUERY_VERSION = "1.8.2"
 EXT_VERSION = '2.2.1'
 
 # Activate django-dbindexer for the default database
