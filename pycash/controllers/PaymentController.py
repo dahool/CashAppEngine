@@ -43,7 +43,7 @@ def save_or_update(request):
     try:
         validate_amount(amount)
     except ValidationError, va1:
-        return '{"success":false, "msg": "%s: %s"}' % (va1.code, "".join(va1.messages))
+        return '{"success":false, "msg": "%s"}' % ("".join(va1.messages))
 
     l = Loan.objects.get(pk=req['loan.id'])
     if param_exist("id",req):

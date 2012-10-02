@@ -33,6 +33,9 @@ except:
 import datetime
 from pycash.decorators import json_response
 
+from pycash.validators import validate_amount
+from django.core.exceptions import ValidationError
+
 @render('cash/income/index.html')
 def index(request):
     return {}
@@ -78,11 +81,21 @@ def list(request):
     return data
 
 @json_response
-def save(request):
+def save_or_update(request):
     req = request.REQUEST
     dt = DateService.parse(req['period']) 
     dt = datetime.date(dt.tm_year, dt.tm_mon, 1)
-    p = Income(period=dt, amount=req['amount'])
+    
+    amount=req['amount']
+    try:
+        validate_amount(amount)
+    except ValidationError, va1:
+        return '{"success":false, "msg": "%s"}' % ("".join(va1.messages))
+        
+    if param_exist('id', req):
+        p = Income(pk=req['id'], period=dt, amount=amount)
+    else:
+        p = Income(period=dt, amount=amount)
     
     try:
         data = '{"success":true}'
@@ -93,22 +106,7 @@ def save(request):
         data = '{"success":false, "msg": "%s"}' % (e1.args)
             
     return data
-    
-@json_response    
-def update(request):
-    req = request.REQUEST
-    dt = DateService.parse(req['period']) 
-    dt = datetime.date(dt.tm_year, dt.tm_mon, 1)
-    p = Income(pk=request.REQUEST['id'],period=dt, amount=req['amount'])
-    try:
-        data = '{"success":true}'
-        p.save()
-    except _mysql_exceptions.Warning:
-        pass
-    except Exception, e1:
-        data = '{"success":false, "msg": "%s"}' % (e1.args)
 
-    return data
 
 @json_response
 def delete(request):

@@ -21,7 +21,7 @@ from common.view.decorators import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment
+from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment, Income
 import datetime
 from django.db.models import Sum
 from pycash.services import DateService, RequestUtils
@@ -135,3 +135,21 @@ def taxAdd(request, id = None):
 def taxPay(request, id):
     e = Tax.objects.get(pk=id)
     return {"tax": e}    
+
+@render('mobile/income_list.html') 
+def incomeList(request):
+    req = request.POST
+    if RequestUtils.param_exist("fromDate", req):
+        fromDate = DateService.parseDate(req['fromDate'])
+    else:
+        dt = datetime.date.today() - datetime.timedelta(days=30*5)
+        fromDate = datetime.date(dt.year, dt.month, 1)
+    q = Income.objects.filter(period__gte = DateService.midNight(fromDate))
+    q = q.order_by("-period")
+    return {"list": q,
+            "filterStart": fromDate}
+
+@render('mobile/income_add.html')
+def incomeEdit(request, id):
+    e = Income.objects.get(pk=id)
+    return {"income": e}    

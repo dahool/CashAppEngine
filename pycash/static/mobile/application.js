@@ -21,8 +21,9 @@ $(function() {
         $('body').show();
     });
     
-    $(document).on('popupafteropen', '#dateFilter', function(event, ui) {
-         $("div#dateFilter-screen.ui-popup-screen").unbind('vclick');
+    $(document).on('popupafteropen', 'div[popup-keep-open]', function(event, ui) {
+         var id = $(this).attr('id');
+         $("div#"+id+"-screen.ui-popup-screen").unbind('vclick');
     });
     
     $(document).on("pageinit", function(){
@@ -49,6 +50,8 @@ $(function() {
         $.mobile.datebox.prototype.options.lang = 'es';
         $.mobile.datebox.prototype.options.disableManualInput = true;
         $.mobile.datebox.prototype.options.mode = 'mixed';
+        $.mobile.datebox.prototype.options.theme = 'android-ics light';
+        $.mobile.datebox.prototype.options.dateOrder = 'D ddmmyy';
     })
     
     $(document).on("pageshow", function(){

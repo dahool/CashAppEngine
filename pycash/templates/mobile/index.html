@@ -15,7 +15,9 @@
 <link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog.min.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/jquery.mobile.notify.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/mobiscroll.core.css" type="text/css" rel="stylesheet" />
-<link media="screen" href="{{ STATIC_URL }}mobile/mobiscroll.jqm.css" type="text/css" rel="stylesheet" />
+<!--link media="screen" href="{{ STATIC_URL }}mobile/mobiscroll.jqm.css" type="text/css" rel="stylesheet" /-->
+<link media="screen" href="{{ STATIC_URL }}mobile/mobiscroll.sense-ui.css" type="text/css" rel="stylesheet" />
+<link media="screen" href="{{ STATIC_URL }}mobile/mobiscroll.android-ics.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/swipe.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/default.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
@@ -27,7 +29,8 @@
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.datetime.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.core-es.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.datetime-es.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.jqm.js"></script>
+<!--script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.jqm.js"></script-->
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.android-ics.js"></script>
 <!--
 <script type="text/javascript" src="http://code.jquery.com/mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog2.js"></script>
@@ -81,7 +84,12 @@
         		<a href="{% url mobile:tax %}">
         			<div class="menu-element tax"><div>Impuestos</div></div>
         		</a>
-        	</li>          
+        	</li>
+        	<li data-icon="false">
+        		<a href="{% url mobile:income_list %}">
+        			<div class="menu-element income"><div>Ingresos</div></div>
+        		</a>
+        	</li>        	          
         </ul>		
 	</div><!-- /content -->
 

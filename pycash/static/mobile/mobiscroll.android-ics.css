@@ -4,6 +4,7 @@
     color: #31b6e7;
     background: #292829;
     border-top: 1px solid #4a494a;
+	z-index: 1103;
 }
 .android-ics .dwwc, .android-ics .dwwl, .android-ics .dww, .android-ics .dwb {
     background: none;

@@ -11,11 +11,15 @@ def lastDateOfMonth(date):
 def firstDateOfMonth(date):
     return datetime.date(date.tm_year, date.tm_mon, 1) 
     
-def parse(str):
-    return time.strptime(str,"%d/%m/%Y")
+def parse(strvalue):
+    if len(strvalue) == 7:
+        strvalue = '01/'+strvalue
+    return time.strptime(strvalue,"%d/%m/%Y")
 
-def parseDate(str):
-    return datetime.datetime.strptime(str,"%d/%m/%Y")
+def parseDate(strvalue):
+    if len(strvalue) == 7:
+        strvalue = '01/'+strvalue    
+    return datetime.datetime.strptime(strvalue,"%d/%m/%Y")
 
 def invert(date):
     if isinstance(date,basestring):
