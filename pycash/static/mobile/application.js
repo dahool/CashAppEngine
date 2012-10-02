@@ -33,12 +33,13 @@ $(function() {
         $('[form-submit]').on("click",function() {
             $(this).hide();
             $elem = $(this);
-            var frm = $(this).attr('form-submit');
+            var lcfrm = $(this).attr('form-submit');
+            var $frm = $(lcfrm+':visible');
             var rte = false;
             if ($(this).attr('return')) {
             	rte = $(this).attr('return');
             }
-            doPostAction($(frm).attr('action'), $(frm).serialize(), frm, rte, function() {$elem.show()});
+            doPostAction($frm.attr('action'), $frm.serialize(), $frm, rte, function() {$elem.show()});
             return false;
         });
         $("[data-role=header]").fixedtoolbar({ tapToggle: false });
