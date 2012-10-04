@@ -1,48 +1,10 @@
-.ui-hide-label {
-	width: 50px;
-	border: 0 none;
-}
-.ui-li-divider {
-    text-align: center;
-}
-.ui-page { 
-	-webkit-backface-visibility: hidden;
-}
-#popupPanel-popup {
-    right: auto !important;
-    left: 0 !important;
-}
-#popupPanel {
-    width: 200px;
-    border: 1px solid #000;
-    border-right: none;
-    background: rgba(0,0,0,.5);
-    margin: -1px 0;
-}
-#popupPanel .ui-btn {
-    margin: 2em 15px;
-}
-label.ui-input-text, label.ui-select {
-	font-weight: bold !important;
-}
-#main_nav {
-    text-align: center;
-}
-#main_nav a {
-    float: none !important;
-}
-#main-menu {
-    width: 190px !important;
-    margin-right: auto;
-    margin-left: auto;
-}
 .menu-element {
-    background: url(images/images.png) no-repeat top left;
+    background: url(images/menuelement.png) no-repeat top left;
     border: 0 none;
     border-radius: 0 0 0 0;
     box-shadow: none;
     width: 80px;
-    height: 100px;
+    height: 80px;
 }
 .menu-element div {
 	padding-left: 6em;
@@ -54,6 +16,16 @@ label.ui-input-text, label.ui-select {
     font-size: 12px;
     text-shadow: none;    
 }
+
+.menu-element.add-icon{ background-position: 0 0;  } 
+.menu-element.chart-icon{ background-position: 0 -130px;  } 
+.menu-element.expense-icon{ background-position: 0 -260px;  } 
+.menu-element.income-icon{ background-position: 0 -390px;  } 
+.menu-element.list-icon{ background-position: 0 -520px;  } 
+.menu-element.loan-icon{ background-position: 0 -650px;  } 
+.menu-element.tax-icon{ background-position: 0 -780px;  } 
+
+*/
 .menu-element.expense {
     background-position: 0px 0px;
     text-indent: -2px;
@@ -76,10 +48,4 @@ label.ui-input-text, label.ui-select {
 }
 .menu-element.chart {
 	background: url(images/icons/chart-icon.png) no-repeat top left;
-}
-.ui-text-red {
-	color: #FF0000;
-}
-#total-holder.ui-text-red {
-	cursor: pointer;
-}
+}*/

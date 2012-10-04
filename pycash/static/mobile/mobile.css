@@ -1,0 +1,44 @@
+.ui-hide-label {
+	width: 50px;
+	border: 0 none;
+}
+.ui-li-divider {
+    text-align: center;
+}
+.ui-page { 
+	-webkit-backface-visibility: hidden;
+}
+#popupPanel-popup {
+    right: auto !important;
+    left: 0 !important;
+}
+#popupPanel {
+    width: 200px;
+    border: 1px solid #000;
+    border-right: none;
+    background: rgba(0,0,0,.5);
+    margin: -1px 0;
+}
+#popupPanel .ui-btn {
+    margin: 2em 15px;
+}
+label.ui-input-text, label.ui-select {
+	font-weight: bold !important;
+}
+#main_nav {
+    text-align: center;
+}
+#main_nav a {
+    float: none !important;
+}
+#main-menu {
+    width: 190px !important;
+    margin-right: auto;
+    margin-left: auto;
+}
+.ui-text-red {
+	color: #FF0000;
+}
+#total-holder.ui-text-red {
+	cursor: pointer;
+}

@@ -1,6 +1,7 @@
 *.py[co]
 settings_local.py
 appengine_config.py
+.settings
 .gaedata
 # Packages
 *.egg
