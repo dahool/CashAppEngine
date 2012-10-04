@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0"
 JQUERY_VERSION = "1.8.2"
@@ -98,6 +98,10 @@ ENABLE_RECORD = True
 ROOT_URLCONF = 'urls'
 
 LANGUAGE_CODE = 'es'
+
+EXPENSES_DEFAULT_DAYS_LIST = 5
+TAX_DEFAULT_DAYS_ADVANCE = 5
+INCOME_DEFAULT_DAYS_AHEAD = 150
 
 try:
     execfile(os.path.join(PROJECT_PATH,'settings_local.py'))

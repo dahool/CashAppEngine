@@ -20,6 +20,7 @@ from django.conf.urls.defaults import patterns, url
   
 urlpatterns = patterns('django.views.generic.simple',
     url(r'^expenses/$', 'direct_to_template', {'template': 'mobile/expenses.html'}, name='expenses'),
+    url(r'^settings/$', 'direct_to_template', {'template': 'mobile/settings.html'}, name='settings'),
     url(r'^person/add/$', 'direct_to_template', {'template': 'mobile/person_add.html'}, name='person_add'),
     url(r'^income/add/$', 'direct_to_template', {'template': 'mobile/income_add.html'}, name='income_add'),
     url(r'^$', 'direct_to_template', {'template': 'mobile/index.html'}, name='home'),
@@ -43,4 +44,5 @@ urlpatterns += patterns('pycash.controllers.MobileController',
     url(r'^tax/pay/(?P<id>[\d]+)/$', 'taxPay', name='tax_pay'),
     url(r'^income/list/$', 'incomeList', name='income_list'),
     url(r'^income/edit/(?P<id>[\d]+)/$', 'incomeEdit', name='income_edit'),
+    url(r'^stats/$', 'stats', name='stats'),
 )

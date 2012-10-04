@@ -20,7 +20,7 @@ from django.core import serializers
 from pycash.decorators import json_response
 from pycash.models import SyncRecord
 from pycash.services.DropboxService import StorageService
-from pycash.services import DateService
+from pycash.services import DateService, StatsService
 import datetime
 import StringIO
 import gzip
@@ -62,5 +62,9 @@ def updateevent(request):
     cmd.handle()
     return {'process': response.getvalue()}
     
+@json_response
+def generatestats(request):
+    StatsService.generate()
+    return {'process': 'ok'}
     
     

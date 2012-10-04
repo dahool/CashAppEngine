@@ -55,7 +55,10 @@ $(function() {
     })
     
     $(document).on("pageshow", function(){
-        $("[field-focus=true]").focus();
+        if (get_android_version() == 999) {
+            // autofocus only on non mobile browser
+            $("[field-focus=true]").focus();
+        }
         $("[field-clear=true]").val("");
         $("[reset-form=true]").find('input,select').each(function() {
             if ($(this).is("select")) $(this).val(-1);

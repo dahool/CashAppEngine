@@ -55,7 +55,7 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     
     def __unicode__(self):
-        return self.period  
+        return u"%s" % self.period  
 
     class Meta:
         db_table = "income"
@@ -245,6 +245,23 @@ class Debits(models.Model):
         db_table = "debits"
         verbose_name_plural = u'Debits'
 
+class StatsData(models.Model):
+    month = models.IntegerField(primary_key=True)
+    expenses = models.DecimalField(max_digits=19, decimal_places=2)
+    incomes = models.DecimalField(max_digits=19, decimal_places=2)
+    
+    def __unicode__(self):
+        return "%s - E: %s - I: %s" % (self.display_month, self.expenses, self.incomes)
+        
+    @property
+    def display_month(self):
+        return u"%s-%s" % (str(self.month)[:4], str(self.month)[-2:])
+    
+    class Meta:
+        db_table = "statsdata"
+        verbose_name_plural = u'Stats'
+        ordering = ("-month",)
+        
 class SyncRecord(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     record = models.TextField()

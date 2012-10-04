@@ -21,10 +21,11 @@ from common.view.decorators import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment, Income
+from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment, Income,\
+    StatsData
 import datetime
 from django.db.models import Sum
-from pycash.services import DateService, RequestUtils
+from pycash.services import DateService, RequestUtils, StatsService
 
 @render('mobile/expenses_frm.html')
 def expensesAdd(request, id = None):
@@ -51,7 +52,7 @@ def expensesList(request):
     if RequestUtils.param_exist("fromDate", req):
         fromDate = DateService.parseDate(req['fromDate'])
     else:
-        fromDate = toDate - datetime.timedelta(days=5)  
+        fromDate = toDate - datetime.timedelta(days=getattr(settings,'EXPENSES_DEFAULT_DAYS_LIST', 5))
     q = Expense.objects.filter(date__gte = DateService.midNight(fromDate), date__lte = DateService.midNight(toDate, True))
     q = q.order_by("-date")
     return {"settings": settings,
@@ -111,7 +112,7 @@ def loans_add(request, id, loanId = None):
    
 @render('mobile/tax.html') 
 def taxHome(request):
-    limit = (datetime.datetime.now() + datetime.timedelta(days=5))
+    limit = (datetime.datetime.now() + datetime.timedelta(days=getattr(settings,'TAX_DEFAULT_DAYS_ADVANCE', 5)))
     upcoming = Tax.objects.filter(expire__lte=limit).order_by('expire')
     return {"list": upcoming}
 
@@ -146,7 +147,7 @@ def incomeList(request):
     if RequestUtils.param_exist("fromDate", req):
         fromDate = DateService.parseDate(req['fromDate'])
     else:
-        dt = datetime.date.today() - datetime.timedelta(days=30*5)
+        dt = datetime.date.today() - datetime.timedelta(days=getattr(settings,'INCOME_DEFAULT_DAYS_AHEAD', 90))
         fromDate = datetime.date(dt.year, dt.month, 1)
     q = Income.objects.filter(period__gte = DateService.midNight(fromDate))
     q = q.order_by("-period")
@@ -157,3 +158,7 @@ def incomeList(request):
 def incomeEdit(request, id):
     e = Income.objects.get(pk=id)
     return {"income": e}    
+
+@render('mobile/stats.html')
+def stats(request):
+    return {'chartdata': StatsService.create_chart()}

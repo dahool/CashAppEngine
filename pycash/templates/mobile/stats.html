@@ -1,0 +1,28 @@
+{% extends "mobile/index.html" %}
+{% load math %}
+<!DOCTYPE HTML>
+<html>
+<head>
+{% block header %}
+{{ block.super }} 
+{% endblock %}
+<body>
+{% block content %}
+<div data-role="page" data-cache="never">
+	<div data-role="header" data-theme="e" data-position="fixed">
+		<a href="{% url mobile:expenses %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
+        <h1>Stats</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="a">
+		<div id="graphstats">{{chartdata|safe}}</div>	
+	</div><!-- /content -->
+
+	{% include "mobile/footer.html" %}
+
+</div><!-- /page -->
+{% endblock %}
+</body>
+</html>
+
+

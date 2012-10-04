@@ -74,6 +74,9 @@ label.ui-input-text, label.ui-select {
 .menu-element.income {
 	background: url(images/icons/income-icon.png) no-repeat top left;
 }
+.menu-element.chart {
+	background: url(images/icons/chart-icon.png) no-repeat top left;
+}
 .ui-text-red {
 	color: #FF0000;
 }

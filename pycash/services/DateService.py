@@ -5,10 +5,14 @@ from dateutil.relativedelta import relativedelta
 
 # return the full date
 def lastDateOfMonth(date):
+    if isinstance(date,datetime.date):
+        return datetime.date(date.year, date.month, calendar.monthrange(date.year,date.month)[1]) 
     return datetime.date(date.tm_year, date.tm_mon, 
                              calendar.monthrange(date.tm_year,date.tm_mon)[1])   
 # return the full date
 def firstDateOfMonth(date):
+    if isinstance(date,datetime.date):
+        return datetime.date(date.year, date.month, 1) 
     return datetime.date(date.tm_year, date.tm_mon, 1) 
     
 def parse(strvalue):
@@ -67,3 +71,12 @@ def toLong(date):
 def addMonth(date,n):
     delta = relativedelta(months=n)
     return date + delta
+
+def getMonthRange(start, end):
+    diff = int((end - start).days / 30)
+    delta = relativedelta(months=1)
+    values = []
+    for n in range(0, diff):
+        values.append((firstDateOfMonth(start), lastDateOfMonth(start)))
+        start = start + delta
+    return values

@@ -13,6 +13,7 @@ admin.site.register(Loan)
 admin.site.register(Payment)
 admin.site.register(SyncRecord)
 admin.site.register(Income)
+admin.site.register(StatsData)
 
 class AuthTokenAdmin(admin.ModelAdmin):
     readonly_fields = ('token', 'token_key')

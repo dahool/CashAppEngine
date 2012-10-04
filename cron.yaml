@@ -8,3 +8,8 @@ cron:
   url: /cron/updateevent/
   schedule: every 2 hours
   timezone: America/Argentina/Buenos_Aires
+
+- description: generate stats
+  url: /cron/generatestats/
+  schedule: 3rd day of month 0:00
+  timezone: America/Argentina/Buenos_Aires

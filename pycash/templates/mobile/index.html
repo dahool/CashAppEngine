@@ -31,6 +31,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.datetime-es.js"></script>
 <!--script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.jqm.js"></script-->
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/mobiscroll.android-ics.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <!--
 <script type="text/javascript" src="http://code.jquery.com/mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/jquery.mobile.simpledialog2.js"></script>
@@ -64,6 +65,7 @@
 <div data-role="page" id="main">
 
 	<div data-role="header">
+		<a href="{% url mobile:settings %}" data-icon="gear" data-iconpos="notext">Options</a>
 		<h1>{{settings.APPLICATION}} v{{settings.VERSION}} (jqm {{settings.MOBILE_VERSION}})</h1>
 		<a href="{% url auth_logout %}" data-icon="delete" data-iconpos="notext" class="ui-btn-right" data-ajax="false">Logout</a>
 	</div><!-- /header -->
