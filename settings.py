@@ -32,7 +32,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles',
     'djangotoolbox',
     'dbindexer',
     'adminplus',
@@ -56,6 +56,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'common.context_processors.settings',
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 AUTHENTICATION_BACKENDS = ('pycash.auth.backends.RemoteTokenBackend',

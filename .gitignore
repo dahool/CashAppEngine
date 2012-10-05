@@ -3,6 +3,7 @@ settings_local.py
 appengine_config.py
 .settings
 .gaedata
+media/.*
 # Packages
 *.egg
 *.egg-info

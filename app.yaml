@@ -4,6 +4,8 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+default_expiration: '14d'
+
 builtins:
 - remote_api: on
 
@@ -15,6 +17,20 @@ libraries:
   version: latest
 - name: lxml
   version: latest
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?.*\.jar
+- ^(.*/)?.settings/.*
+- ^(.*/)?.git/.*
     
 handlers:
 - url: /_ah/queue/deferred
@@ -26,10 +42,13 @@ handlers:
 
 - url: /media/admin
   static_dir: django/contrib/admin/media
-  expiration: '1d'
 
+- url: /media/mobile/lib
+  static_dir: pycash/static/mobile/lib
+  
 - url: /media
   static_dir: pycash/static
+  expiration: '1d'
   
 - url: /cron/.*
   script: djangoappengine.main.application
@@ -45,7 +64,6 @@ handlers:
   
 - url: /(.*\.(gif|png|jpg))
   static_dir: pycash/static/images
-  expiration: '1d'
   
 - url: /.*
   script: djangoappengine.main.application
