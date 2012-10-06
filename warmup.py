@@ -15,20 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from google.appengine.ext import webapp 
-from google.appengine.ext.webapp.util import run_wsgi_app
+import webapp2
 
-class WarmUp(webapp.RequestHandler):
+class WarmUp(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.out.write("OK")
 
-def main():
-    application = webapp.WSGIApplication(
-                                     [
-                                     ('/warmup',WarmUp)
-                                     ])  
-    run_wsgi_app(application)
-  
-if __name__ == "__main__":
-    main()
+app = webapp2.WSGIApplication([('/_ah/warmup',WarmUp)])
