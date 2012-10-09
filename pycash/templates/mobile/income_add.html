@@ -12,11 +12,12 @@
 	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:income_list %}" data-icon="minus" data-theme="b" data-rel="back">Cancelar</a>
         <h1>Ingresos</h1>
-        <a data-icon="check" data-theme="c" form-submit="#form-add-income" return="back">Guardar</a>
+        <a data-icon="check" data-theme="c" form-submit="#form-add-income-{{requestid}}" return="back">Guardar</a>
 	</div><!-- /header -->
 
 	<div data-role="content">
-        <form id="form-add-income" action="{% url income_save %}">
+        <form id="form-add-income-{{requestid}}" action="{% url income_save %}">
+        	{% csrf_token %}
         	{% if income %}
         		<input type="hidden" name="id" value="{{income.id}}" />
         	{% endif %}

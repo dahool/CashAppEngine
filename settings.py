@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.4"
+VERSION = "1.0.5"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0"
 JQUERY_VERSION = "1.8.2"
@@ -48,6 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pycash.auth.middleware.RemoteTokenMiddleware',
     'pycash.auth.loginmiddleware.LoginRequiredMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -55,7 +56,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'django.core.context_processors.csrf',
     'common.context_processors.settings',
+    'common.context_processors.requestid',
 )
 
 STATICFILES_FINDERS = (

@@ -12,11 +12,12 @@
 	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:tax %}" data-icon="minus" data-theme="b" data-rel="back">Cancelar</a>
         <h1>Impuestos</h1>
-        <a data-icon="check" data-theme="c" form-submit="#form-add-tax" return="back">Guardar</a>
+        <a data-icon="check" data-theme="c" form-submit="#form-add-tax-{{requestid}}" return="back">Guardar</a>
 	</div><!-- /header -->
 
 	<div data-role="content" data-return="back">
-        <form id="form-add-tax" action="{% url tax_save %}">
+        <form id="form-add-tax-{{requestid}}" action="{% url tax_save %}">
+        	{% csrf_token %}
         	{% if tax %}
         		<input type="hidden" name="id" value="{{tax.id}}"/>
         	{% endif %}

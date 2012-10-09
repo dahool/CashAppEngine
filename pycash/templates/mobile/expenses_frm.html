@@ -13,14 +13,15 @@
         <a href="{% url mobile:expenses %}" data-icon="minus" data-theme="b" data-rel="back">Cancelar</a>
         <h1>Gastos</h1>
         {% if expense %}
-            <a data-icon="check" data-theme="c" form-submit="#form-add-expense" return="back">Guardar</a>
+            <a data-icon="check" data-theme="c" form-submit="#form-add-expense-{{requestid}}" return="back">Guardar</a>
         {% else %}
-            <a data-icon="check" data-theme="c" form-submit="#form-add-expense">Guardar</a>
+            <a data-icon="check" data-theme="c" form-submit="#form-add-expense-{{requestid}}">Guardar</a>
         {% endif %}
 	</div><!-- /header -->
 
 	<div data-role="content">
-        <form id="form-add-expense" action="{% url expenses_save %}" after-submit-clean="amount,text">
+        <form id="form-add-expense-{{requestid}}" action="{% url expenses_save %}" after-submit-clean="amount,text">
+        	{% csrf_token %}
         	{% if expense %}
         		<input type="hidden" name="id" value="{{expense.id}}" />
         	{% endif %}

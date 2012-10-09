@@ -12,11 +12,12 @@
 	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:loans_list loan.person.id %}" data-icon="back" data-theme="b" data-rel="back">Cancelar</a>
         <h1>Pago {{loan.reason}} [{{loan.person.name}}]</h1>
-        <a data-icon="check" data-theme="c" form-submit="#form-add" return="back">Guardar</a>
+        <a data-icon="check" data-theme="c" form-submit="#form-add-{{requestid}}" return="back">Guardar</a>
 	</div><!-- /header -->
 
 	<div data-role="content">	
-        <form id="form-add" action="{% url payment_save %}">
+        <form id="form-add-{{requestid}}" action="{% url payment_save %}">
+        	{% csrf_token %}
         	<input type="hidden" name="loan.id" value="{{loan.id}}"/>
         	{% if payment %}
         	<input type="hidden" name="id" value="{{payment.id}}"/>

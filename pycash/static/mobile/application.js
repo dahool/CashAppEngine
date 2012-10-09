@@ -31,11 +31,11 @@ $(function() {
             $.mobile.selectmenu.prototype.options.nativeMenu = false;  
         }
         
-        $('[form-submit]').on("click",function() {
+        $('[form-submit]').off('click').on("click",function() {
             $(this).hide();
             $elem = $(this);
             var lcfrm = $(this).attr('form-submit');
-            var $frm = $(lcfrm+':visible');
+            var $frm = $(lcfrm);
             var rte = false;
             if ($(this).attr('return')) {
             	rte = $(this).attr('return');
