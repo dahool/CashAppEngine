@@ -48,7 +48,8 @@
                     	<label for="ptype-{{ptype.id}}">{{ptype.name}}</label>
                     {% endfor %}                    
                 </fieldset>
-                </div>         
+                </div>
+                {% cache 600 "expenses_form" expense %}         
                 <div data-role="fieldcontain">
                     <label for="category">Categor&iacute;a:</label>
                     <select name="subCategory.id" id="category" data-overlay-theme="b">
@@ -63,6 +64,7 @@
 					{% endfor %}
                     </select>                
                 </div>
+                {% endcache %}
                 </li>
             </ul>
         </form>
