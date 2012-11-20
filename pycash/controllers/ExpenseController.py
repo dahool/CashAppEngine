@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 from common.view.decorators import render
-
+import re
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -176,6 +176,11 @@ def fromParams(req):
         raise ValidationError(_('Enter a valid date.'))
         
     amount = req['amount']
+    if re.match('^[-\+\d\.]+$',amount):
+        try:
+            amount = str(eval(amount))
+        except:
+            pass
     validate_amount(amount)
     
     if not amount or float(amount) == 0.0:
