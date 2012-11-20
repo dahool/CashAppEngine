@@ -48,7 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pycash.auth.middleware.RemoteTokenMiddleware',
     'pycash.auth.loginmiddleware.LoginRequiredMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
