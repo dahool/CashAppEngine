@@ -67,4 +67,8 @@ def generatestats(request):
     StatsService.generate()
     return {'process': 'ok'}
     
+@json_response
+def generatemonthstats(request):
+    StatsService.generate_current()
+    return {'process': 'ok'}    
     

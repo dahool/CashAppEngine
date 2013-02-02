@@ -221,10 +221,11 @@ def save_or_update(request):
         data = '{"success":false, "msg": "%s"}' % ("".join(e.messages))
         return data
         
+    values = {'text':e.text,'date':req['date'], 'amount': float(e.amount)}
     if e.id:
-        data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> [<b>%(date)s</b>].') % {'text':e.text,'date':req['date']})
+        data = '{"success":true, "msg": "%s"}' % (_('Updated expense <b>%(text)s</b> $ %(amount).2f [<b>%(date)s</b>].') % values)
     else:
-        data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> [<b>%(date)s</b>].') % {'text':e.text,'date':req['date']})
+        data = '{"success":true, "msg": "%s"}' % (_('Created expense <b>%(text)s</b> $ %(amount).2f [<b>%(date)s</b>].') % values)
         
     try:
         e.save()

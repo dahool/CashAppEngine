@@ -52,7 +52,7 @@ $(function() {
         $.mobile.datebox.prototype.options.mode = 'mixed';
         $.mobile.datebox.prototype.options.theme = 'android-ics light';
         $.mobile.datebox.prototype.options.dateOrder = 'D ddmmyy';
-    })
+    });
     
     $(document).on("pageshow", function(){
         if (get_android_version() == 999) {

@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.7"
+VERSION = "1.0.8"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0"
 JQUERY_VERSION = "1.8.2"
@@ -59,6 +59,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.csrf',
     'common.context_processors.settings',
     'common.context_processors.requestid',
+    'pycash.context_processor.current_date',
 )
 
 STATICFILES_FINDERS = (

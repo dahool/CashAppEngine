@@ -22,21 +22,16 @@ $.widget( "mobile.datebox", $.mobile.widget, {
         lang: 'en',
         mode: 'scroller',
         disableManualInput: false,
-        preset: 'date'
+        preset: 'date',
     },
     _create: function(){
         var self = this;
         var o = $.extend(this.options, this.element.data('options'));
         var input = this.element;
-/*        var thisTheme = input.parentsUntil(':jqmData(theme)').parent().jqmData('theme');
-        var fEl = input.wrap('<div class="ui-input-datebox ui-shadow-inset ui-corner-all ui-body-'+ thisTheme +'"></div>').parent();
-        var button = $('<span class="ui-input-clear">&nbsp;</span>').appendTo(fEl).buttonMarkup({icon: 'grid', iconpos: 'notext', corners:true, shadow:true}).css({'vertical-align': 'middle', 'display': 'inline-block'});
-  */      
         $(input).scroller(o);
         $(input).on('click', function() {
             $(this).scroller('show');
         });
-        
         if (o.disableManualInput) $(input).attr("readonly", true);
     },
 });
@@ -53,7 +48,8 @@ $(document).on("pagecreate", function(c) {
     $(document).trigger("dateboxbeforecreate");
     $(":jqmData(role='datebox')", c.target).each(function() {
         if (typeof ($(this).data("datebox")) === "undefined") {
-            $(this).datebox();
+            var dtb = $(this).datebox();
+            $(document).trigger('dateboxaftercreate', [dtb]);
         }
     })
 });

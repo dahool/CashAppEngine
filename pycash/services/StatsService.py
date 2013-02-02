@@ -21,6 +21,12 @@ from pycash.models import Expense, Income, StatsData
 from django.conf import settings
 from pycash.services.Utils import logger
 
+def generate_current():
+    date = DateService.todayDate() 
+    fromDate = DateService.firstDateOfMonth(date)
+    toDate = DateService.lastDateOfMonth(date)
+    create_stats(fromDate, toDate)
+    
 def generate():
     date = DateService.addMonth(DateService.todayDate(),-1) 
     fromDate = DateService.addMonth(DateService.firstDateOfMonth(date),-6)
@@ -41,8 +47,8 @@ def create_stats(fromDate, toDate):
     
     try:
         data = StatsData.objects.get(pk=month)
-        if data.incomes == incomeSum:
-            return
+#        if data.incomes == incomeSum:
+#            return
     except StatsData.DoesNotExist:
         data = StatsData(month=month)
         

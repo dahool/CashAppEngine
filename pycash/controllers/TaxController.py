@@ -229,6 +229,9 @@ def pay(request):
             e.nextExpire = DateService.parseDate(req['nextExpire2'])
         else:
             e.nextExpire = None
+            
+        payDate = DateService.parseDate(req['date'])
+        
         amount = req['amount']
         try:
             validate_amount(amount)
@@ -240,7 +243,7 @@ def pay(request):
             service = e.service
         else:
             service = "%s (%s)" % (e.service, e.account)
-        expense = Expense(date=DateService.todayDate(), text=service, amount=e.amount, subCategory=e.subCategory, paymentType=e.paymentType)
+        expense = Expense(date=payDate, text=service, amount=e.amount, subCategory=e.subCategory, paymentType=e.paymentType)
         
         data = '{"success":true}'
         

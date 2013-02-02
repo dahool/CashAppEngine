@@ -23,6 +23,10 @@
             	<li data-role="list-divider">Pagar {{tax.service}}</li>
                 <li>
                 <div data-role="fieldcontain">
+                    <label for="date">Fecha Pago:</label>
+                    <input type="date" data-role="datebox" value="{% if today < tax.expire %}{{today|date:"d/m/Y"}}{%else%}{{tax.expire|date:"d/m/Y"}}{%endif%}" name="date" id="date" />
+                </div>
+                <div data-role="fieldcontain">
                     <label for="amount">Monto:</label>
                     <input type="number" name="amount" id="amount" value="{{tax.amount}}"/>
                 </div>
