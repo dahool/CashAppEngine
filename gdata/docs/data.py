@@ -18,7 +18,6 @@
 
 __author__ = 'vicfryzel@google.com (Vic Fryzel)'
 
-import re
 import atom.core
 import atom.data
 import gdata.acl.data
@@ -29,6 +28,8 @@ DOCUMENTS_NS = 'http://schemas.google.com/docs/2007'
 LABELS_NS = 'http://schemas.google.com/g/2005/labels'
 DOCUMENTS_TEMPLATE = '{http://schemas.google.com/docs/2007}%s'
 ACL_FEEDLINK_REL = 'http://schemas.google.com/acl/2007#accessControlList'
+RESUMABLE_CREATE_MEDIA_LINK_REL = 'http://schemas.google.com/g/2005#resumable-create-media'
+RESUMABLE_EDIT_MEDIA_LINK_REL = 'http://schemas.google.com/g/2005#resumable-edit-media'
 REVISION_FEEDLINK_REL = DOCUMENTS_NS + '/revisions'
 PARENT_LINK_REL = DOCUMENTS_NS + '#parent'
 PUBLISH_LINK_REL = DOCUMENTS_NS + '#publish'
@@ -110,6 +111,11 @@ class Filename(atom.core.XmlElement):
 class SuggestedFilename(atom.core.XmlElement):
   """The DocList docs:suggestedFilename element."""
   _qname = DOCUMENTS_TEMPLATE % 'suggestedFilename'
+
+
+class Description(atom.core.XmlElement):
+  """The DocList docs:description element."""
+  _qname = DOCUMENTS_TEMPLATE % 'description'
 
 
 class CategoryFinder(object):
@@ -255,7 +261,7 @@ class CategoryFinder(object):
     Args:
       label: The str label to set
     """
-    if not self.has_label(self):
+    if not self.has_label(label):
       self.add_category(scheme=LABELS_SCHEME,
                         term='%s#%s' % (LABELS_NS, label),
                         label=label)
@@ -385,7 +391,7 @@ class AclFeed(gdata.acl.data.AclFeed):
   entry = [AclEntry]
 
 
-class Resource(gdata.data.GDEntry, CategoryFinder):
+class Resource(gdata.data.BatchEntry, CategoryFinder):
   """DocList version of an Atom Entry."""
 
   last_viewed = LastViewed
@@ -397,6 +403,7 @@ class Resource(gdata.data.GDEntry, CategoryFinder):
   feed_link = [gdata.data.FeedLink]
   filename = Filename
   suggested_filename = SuggestedFilename
+  description = Description
   # Only populated if you request /feeds/default/private/expandAcl
   acl_feed = AclFeed
 
@@ -437,18 +444,25 @@ class Resource(gdata.data.GDEntry, CategoryFinder):
 
   GetRevisionsFeedLink = get_revisions_feed_link
 
+  def get_resumable_create_media_link(self):
+    """Extracts the Resource's resumable create link.
+
+    Returns:
+      A gdata.data.FeedLink object.
+    """
+    return self.get_link(RESUMABLE_CREATE_MEDIA_LINK_REL)
+
+  GetResumableCreateMediaLink = get_resumable_create_media_link
+
   def get_resumable_edit_media_link(self):
     """Extracts the Resource's resumable update link.
 
     Returns:
       A gdata.data.FeedLink object.
     """
-    for feed_link in self.feed_link:
-      if feed_link.rel == RESUMABLE_EDIT_MEDIA_LINK_REL:
-        return feed_link
-    return None
+    return self.get_link(RESUMABLE_EDIT_MEDIA_LINK_REL)
 
-  GetRevisionsFeedLink = get_revisions_feed_link
+  GetResumableEditMediaLink = get_resumable_edit_media_link
 
   def in_collections(self):
     """Returns the parents link(s) (collections) of this entry."""
@@ -461,7 +475,7 @@ class Resource(gdata.data.GDEntry, CategoryFinder):
   InCollections = in_collections
 
 
-class ResourceFeed(gdata.data.GDFeed):
+class ResourceFeed(gdata.data.BatchFeed):
   """Main feed containing a list of resources."""
   entry = [Resource]
 

@@ -22,7 +22,7 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from pycash.models import Expense, SubCategory, PaymentType, Tax
-from pycash.services import JsonParser, DateService, googlecalendar
+from pycash.services import JsonParser, DateService, googlecalendar, CalendarService
 from django.db.models import Q
 from pycash.services.RequestUtils import param_exist, sortMethod
 try:
@@ -120,7 +120,8 @@ def save_or_update(request):
 def update_calendar(id):
     get_logger().info("Update calendar event %s" % id)
     tax = Tax.objects.get(pk=id)
-    calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
+    calendar = CalendarService.get_calendar_helper()
+    #calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
     #event = False
 
     if tax.gcalId != '':
@@ -168,10 +169,12 @@ def delete(request):
         if settings.USE_GOOGLE_CAL:
             try:
                 if e.gcalId != '':
-                    calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
+                    calendar = CalendarService.get_calendar_helper()
+                    #calendar = googlecalendar.CalendarHelper(settings.GOOGLE_USER, settings.GOOGLE_PASS)
                     event = calendar.get_event(e.gcalId)
                     if event is not False:
-                        calendar.delete_event(event);
+                        get_logger().info("Delete calendar event %s" % e.gcalId)
+                        calendar.delete_event(event)
             except:
                 pass
         e.delete()

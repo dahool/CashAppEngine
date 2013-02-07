@@ -324,14 +324,19 @@ class CalendarHelper:
     _ca_client = None
     _account_email = None
     
-    def __init__(self, username, password):
+    def __init__(self, username, password, isAppEngine=False, ssl=None):
         """Instantiate a new Client and do login"""
         self._account_email = username
-        self._ca_client = self.do_login(username, password)
+        self._ca_client = self.do_login(username, password, isAppEngine, ssl)
         
-    def do_login(self, username, password):
+    def do_login(self, username, password, isAppEngine=False, ssl=None):
         """Login to the Calendar Service"""
         self._ca_client = gdata.calendar.service.CalendarService()
+        if ssl != None:
+            self._ca_client.ssl = True
+        if isAppEngine:
+            from gdata.alt.appengine import run_on_appengine
+            run_on_appengine(self._ca_client)
         self._ca_client.email = username
         self._ca_client.password = password
         self._ca_client.source = 'sgtdev-pythonCalendarHelper-0.1'

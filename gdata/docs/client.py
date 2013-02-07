@@ -32,9 +32,8 @@ import gdata.gauth
 # Feed URIs that are given by the API, but cannot be obtained without
 # making a mostly unnecessary HTTP request.
 RESOURCE_FEED_URI = '/feeds/default/private/full'
+RESOURCE_SELF_LINK_TEMPLATE = RESOURCE_FEED_URI + '/%s'
 RESOURCE_UPLOAD_URI = '/feeds/upload/create-session/default/private/full'
-COLLECTION_UPLOAD_URI_TEMPLATE = \
-    '/feeds/upload/create-session/feeds/default/private/full/%s/contents'
 ARCHIVE_FEED_URI = '/feeds/default/private/archive'
 METADATA_URI = '/feeds/metadata/default'
 CHANGE_FEED_URI = '/feeds/default/private/changes'
@@ -208,6 +207,20 @@ class DocsClient(gdata.client.GDClient):
 
   GetResource = get_resource
 
+  def get_resource_by_id(self, resource_id, **kwargs):
+    """Retrieves a resource again given its resource ID.
+
+    Args:
+      resource_id: Typed or untyped resource ID of a resource.
+      kwargs: Other args to pass to GetResourceBySelfLink().
+    Returns:
+      gdata.docs.data.Resource representing retrieved resource.
+    """
+    return self.GetResourceBySelfLink(
+        RESOURCE_SELF_LINK_TEMPLATE % resource_id, **kwargs)
+
+  GetResourceById = get_resource_by_id
+
   def get_resource_by_self_link(self, uri, etag=None, show_root=None,
                                 **kwargs):
     """Retrieves a particular resource by its self link.
@@ -260,7 +273,7 @@ class DocsClient(gdata.client.GDClient):
           first be created with the given metadata and content.
       media: (optional) gdata.data.MediaSource containing the file to be
           uploaded.
-      collection: (optional) gdata.docs.data.Resource representing a collection 
+      collection: (optional) gdata.docs.data.Resource representing a collection
           in which this new entry should be created. If provided along
           with create_uri, create_uri will win (e.g. entry will be created at
           create_uri, not necessarily in given collection).
@@ -269,7 +282,7 @@ class DocsClient(gdata.client.GDClient):
           gdata.docs.client.RESOURCE_FEED_URI.  If collection and create_uri are
           None, use gdata.docs.client.RESOURCE_UPLOAD_URI.  If collection and
           media are not None,
-          gdata.docs.client.COLLECTION_UPLOAD_URI_TEMPLATE is used,
+          collection.GetResumableCreateMediaLink() is used,
           with the collection's resource ID substituted in.
       kwargs: Other parameters to pass to self.post() and self.update().
 
@@ -278,8 +291,7 @@ class DocsClient(gdata.client.GDClient):
     """
     if media is not None:
       if create_uri is None and collection is not None:
-        create_uri = COLLECTION_UPLOAD_URI_TEMPLATE % \
-            collection.resource_id.text
+        create_uri = collection.GetResumableCreateMediaLink().href
       elif create_uri is None:
         create_uri = RESOURCE_UPLOAD_URI
       uploader = gdata.client.ResumableUploader(
@@ -352,6 +364,7 @@ class DocsClient(gdata.client.GDClient):
       response was not successful.
     """
     self._check_entry_is_not_collection(entry)
+    self._check_entry_has_content(entry)
     uri = self._get_download_uri(entry.content.src, extra_params)
     self._download_file(uri, file_path, **kwargs)
 
@@ -375,6 +388,7 @@ class DocsClient(gdata.client.GDClient):
       response was not successful.
     """
     self._check_entry_is_not_collection(entry)
+    self._check_entry_has_content(entry)
     uri = self._get_download_uri(entry.content.src, extra_params)
     return self._get_content(uri, **kwargs)
 
@@ -516,19 +530,18 @@ class DocsClient(gdata.client.GDClient):
 
   def delete_resource(self, entry, permanent=False, **kwargs):
     """Trashes or deletes the given entry.
-    
+
     Args:
       entry: gdata.docs.data.Resource to trash or delete.
       permanent: True to skip the trash and delete the entry forever.
       kwargs: Other args to pass to gdata.client.GDClient.Delete()
-    
+
     Returns:
       Result of delete request.
     """
-    uri = entry.GetEditLink().href
     if permanent:
-      uri += '?delete=true'
-    return super(DocsClient, self).delete(uri, **kwargs)
+      kwargs['delete'] = 'true'
+    return gdata.client.GDClient.delete(self, entry, **kwargs)
 
   DeleteResource = delete_resource
 
@@ -571,11 +584,40 @@ class DocsClient(gdata.client.GDClient):
       raise ValueError(
           '%s is a collection, which is not valid in this method' % str(entry))
 
+  def _check_entry_has_content(self, entry):
+    """Ensures given entry has a content element with src.
+
+    Args:
+      entry: Entry to test.
+    Raises:
+      ValueError: If given entry is not an entry or has no content src.
+    """
+    # Don't use _check_entry_is_resource since could be Revision etc
+    if not (hasattr(entry, 'content') and entry.content and
+            entry.content.src):
+      raise ValueError('Entry %s has no downloadable content.' % entry)
+
+  def get_acl(self, entry, **kwargs):
+    """Retrieves an AclFeed for the given resource.
+
+    Args:
+      entry: gdata.docs.data.Resource to fetch AclFeed for.
+      kwargs: Other args to pass to GetFeed().
+    Returns:
+      gdata.docs.data.AclFeed representing retrieved entries.
+    """
+    self._check_entry_is_resource(entry)
+    return self.get_feed(
+        entry.GetAclFeedLink().href,
+        desired_class=gdata.docs.data.AclFeed, **kwargs)
+
+  GetAcl = get_acl
+
   def get_acl_entry(self, entry, **kwargs):
     """Retrieves an AclEntry again.
-    
+
     This is useful if you need to poll for an ACL changing.
-    
+
     Args:
       entry: gdata.docs.data.AclEntry to fetch and return.
       kwargs: Other args to pass to GetAclEntryBySelfLink().
@@ -627,8 +669,8 @@ class DocsClient(gdata.client.GDClient):
       raise ValueError(('Given resource has no ACL link.  Did you fetch this'
                         'resource from the API?'))
     if send_notifications is not None:
-      if send_notifications:
-        uri += '?send-notification-emails=true'
+      if not send_notifications:
+        uri += '?send-notification-emails=false'
 
     return self.post(acl_entry, uri, desired_class=gdata.docs.data.AclEntry,
                      **kwargs)
@@ -648,23 +690,23 @@ class DocsClient(gdata.client.GDClient):
       gdata.docs.data.AclEntry representing the updated ACL entry.
     """
     uri = entry.GetEditLink().href
-    if send_notifications:
-      uri += '?send-notification-emails=true'
-    return super(DocsClient, self).update(entry, uri=uri, force=True, **kwargs)
+    if not send_notifications:
+      uri += '?send-notification-emails=false'
+    return super(DocsClient, self).update(entry, uri=uri, **kwargs)
 
   UpdateAclEntry = update_acl_entry
 
   def delete_acl_entry(self, entry, **kwargs):
     """Deletes the given AclEntry.
-    
+
     Args:
       entry: gdata.docs.data.AclEntry to delete.
       kwargs: Other args to pass to gdata.client.GDClient.Delete()
-    
+
     Returns:
       Result of delete request.
     """
-    return super(DocsClient, self).delete(entry.GetEditLink().href, force=True,
+    return super(DocsClient, self).delete(entry.GetEditLink().href,
                                           **kwargs)
 
   DeleteAclEntry = delete_acl_entry
@@ -678,19 +720,19 @@ class DocsClient(gdata.client.GDClient):
 
     Then, put all of your modified AclEntry objects into a list and pass
     that list as the entries parameter.
-    
+
     Args:
       resource: gdata.docs.data.Resource to which the given entries belong.
       entries: [gdata.docs.data.AclEntry] to modify in some way.
       kwargs: Other args to pass to gdata.client.GDClient.post()
-    
+
     Returns:
       Resulting gdata.docs.data.AclFeed of changes.
     """
     feed = gdata.docs.data.AclFeed()
     feed.entry = entries
     return super(DocsClient, self).post(
-        feed, uri=resource.GetAclLink().href + '/acl', force=True, **kwargs)
+        feed, uri=resource.GetAclLink().href + '/batch', **kwargs)
 
   BatchProcessAclEntries = batch_process_acl_entries
 
@@ -713,7 +755,7 @@ class DocsClient(gdata.client.GDClient):
 
   def get_revision(self, entry, **kwargs):
     """Retrieves a revision again given its entry.
-    
+
     Args:
       entry: gdata.docs.data.Revision to fetch and return.
       kwargs: Other args to pass to GetRevisionBySelfLink().
@@ -760,6 +802,8 @@ class DocsClient(gdata.client.GDClient):
       gdata.client.RequestError if the download URL is malformed or the server's
       response was not successful.
     """
+    self._check_entry_is_not_collection(entry)
+    self._check_entry_has_content(entry)
     uri = self._get_download_uri(entry.content.src, extra_params)
     self._download_file(uri, file_path, **kwargs)
 
@@ -782,6 +826,7 @@ class DocsClient(gdata.client.GDClient):
       response was not successful.
     """
     self._check_entry_is_not_collection(entry)
+    self._check_entry_has_content(entry)
     uri = self._get_download_uri(entry.content.src, extra_params)
     return self._get_content(uri, **kwargs)
 
@@ -840,11 +885,11 @@ class DocsClient(gdata.client.GDClient):
 
   def delete_revision(self, entry, **kwargs):
     """Deletes the given Revision.
-    
+
     Args:
       entry: gdata.docs.data.Revision to delete.
       kwargs: Other args to pass to gdata.client.GDClient.Delete()
-    
+
     Returns:
       Result of delete request.
     """
@@ -854,9 +899,9 @@ class DocsClient(gdata.client.GDClient):
 
   def get_archive(self, entry, **kwargs):
     """Retrieves an archive again given its entry.
-    
+
     This is useful if you need to poll for an archive completing.
-    
+
     Args:
       entry: gdata.docs.data.Archive to fetch and return.
       kwargs: Other args to pass to GetArchiveBySelfLink().
@@ -927,11 +972,11 @@ class DocsClient(gdata.client.GDClient):
 
   def delete_archive(self, entry, **kwargs):
     """Aborts the given Archive operation, or deletes the Archive.
-    
+
     Args:
       entry: gdata.docs.data.Archive to delete.
       kwargs: Other args to pass to gdata.client.GDClient.Delete()
-    
+
     Returns:
       Result of delete request.
     """
@@ -984,7 +1029,7 @@ class DocsQuery(gdata.client.Query):
           Possible values are 'true' and 'false'. Default is false.
       ocr: str (optional) Specifies whether to attempt OCR on a .jpg, .png, or
           .gif upload. Possible values are 'true' and 'false'. Default is
-          false. See OCR in the Protocol Guide: 
+          false. See OCR in the Protocol Guide:
           http://code.google.com/apis/documents/docs/3.0/developers_guide_protocol.html#OCR
       target_language: str (optional) Specifies the language to translate a
           document into. See Document Translation in the Protocol Guide for a

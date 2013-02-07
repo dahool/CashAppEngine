@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.8"
+VERSION = "1.0.9"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.2.0"
 JQUERY_VERSION = "1.8.2"
@@ -24,7 +24,7 @@ TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_TZ = True
 TZ_OFFSET = -180
 
-SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
+SECRET_KEY = '1234567890'
 
 INSTALLED_APPS = (
 #    'django.contrib.admin',
@@ -104,6 +104,7 @@ else:
                  
 USE_GOOGLE_CAL = True
 ENABLE_RECORD = True
+RUN_ON_APPENGINE = False
 
 ROOT_URLCONF = 'urls'
 
