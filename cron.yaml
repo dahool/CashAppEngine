@@ -18,7 +18,3 @@ cron:
   url: /cron/generatestats/
   schedule: 3rd day of month 0:00
   timezone: America/Argentina/Buenos_Aires
-
-- description: warm up
-  url: /_ah/warmup
-  schedule: every 5 minutes
