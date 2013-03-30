@@ -9,21 +9,21 @@
 <body>
 {% block content %}
 <div data-role="page">
-	<div data-role="header" data-theme="e" data-position="fixed">
+    <div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:loans %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
         <h1>Préstamos</h1>
         <a href="{% url mobile:loans_add person.id %}" data-icon="add" data-iconpos="notext" data-theme="f">Nuevo Préstamo</a>
-	</div><!-- /header -->
+    </div><!-- /header -->
 
-	<div data-role="content">	
-		<ul data-role="listview" data-split-icon="plus" data-split-theme="e" data-inset="true">
-			<li data-role="list-divider">{{person.name}}<span class="ui-li-count" id="total-holder" total-value="{{total|floatformat:2}}" total-prefix="Total: $">Total: ${{total|floatformat:2}}</span></li>
-			{% for loan in list %}
-			<li swipe-options='{"direction": "left", "buttons": [{"style": "e", "value": "Editar", "href": "{% url mobile:loans_edit person.id loan.id %}"}]}'>
-				<label class='ui-hide-label'><input type="checkbox" summatory="{{loan.remain|floatformat:2}}"/></label>
-				<a href="{% url mobile:loans_payments loan.id %}">
-				<span class="ui-li-count" style="top: 15px;">{{loan.date}}</span>
-				<span class="ui-li-aside" style="margin-top: 30px; ">Resto: ${{loan.remain|floatformat:2}}</span>
+    <div data-role="content">   
+        <ul data-role="listview" data-split-icon="plus" data-split-theme="e" data-inset="true">
+            <li data-role="list-divider">{{person.name}}<span class="ui-li-count" id="total-holder" total-value="{{total|floatformat:2}}" total-prefix="Total: $">Total: ${{total|floatformat:2}}</span></li>
+            {% for loan in list %}
+            <li swipe-options='{"direction": "left", "buttons": [{"style": "e", "value": "Editar", "href": "{% url mobile:loans_edit person.id loan.id %}"}]}'>
+                <label class='ui-hide-label'><input type="checkbox" summatory="{{loan.remain|floatformat:2}}"/></label>
+                <a href="{% url mobile:loans_payments loan.id %}">
+                <span class="ui-li-count" style="top: 15px;">{{loan.date}}</span>
+                <span class="ui-li-aside" style="margin-top: 30px; ">Resto: ${{loan.remain|floatformat:2}}</span>
                 <div>
                     <h3>{{loan.reason}}</h3>            
                     <p>Total: ${{loan.amount|floatformat:2}}</p>
@@ -32,13 +32,13 @@
                     {% endif %}
                 </div></a>
                 <a href="{% url mobile:loans_payments_add loan.id %}">Añadir pago</a>
-			</li>
-			{% endfor %}
-		</ul>
-	</div><!-- /content -->
-	
-	{% include "mobile/footer.html" %}
-	
+            </li>
+            {% endfor %}
+        </ul>
+    </div><!-- /content -->
+    
+    {% include "mobile/footer.html" %}
+    
 </div><!-- /page -->
 {% endblock %}
 </body>

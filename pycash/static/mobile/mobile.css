@@ -42,3 +42,9 @@ label.ui-input-text, label.ui-select {
 #total-holder.ui-text-red {
 	cursor: pointer;
 }
+.ui-checkbox .ui-icon {
+    left: 15px;
+    margin-top: -9px;
+    position: absolute;
+    top: 50%;
+}
