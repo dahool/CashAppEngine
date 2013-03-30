@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL }, name='auth_logout'),
     url(r'^api/',include('pycash.api.urls', namespace='api')),
     url(r'^cron/',include('pycash.cron.urls', namespace='cron')),
-    url(r'^$','pycash.views.mobile'),
+    url(r'^$','pycash.views.mobile', name='home'),
     url(r'',include('pycash.controllers.urls')),
 )
 

@@ -30,19 +30,19 @@
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.datetime-es.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.android-ics.js"></script>
 <script type="text/javascript">
-	$(function() {
+    $(function() {
         $.cachedScript("https://ajax.aspnetcdn.com/ajax/jquery.mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");	
-		});        
-		/*
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
+        });        
+        /*
         $.cachedScript("http://code.jquery.com/mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
-			$.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");	
-		});*/
-	});
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
+        });*/
+    });
 </script> 
 {% endblock %}
 </head>
@@ -50,36 +50,38 @@
 {% block content %}
 <div data-role="page" id="main">
 
-	<div data-role="header">
-		<a href="{% url mobile:settings %}" data-icon="gear" data-iconpos="notext">Options</a>
-		<h1>{{settings.APPLICATION}} v{{settings.VERSION}} (jqm {{settings.MOBILE_VERSION}})</h1>
-		<a href="{% url auth_logout %}" data-icon="delete" data-iconpos="notext" class="ui-btn-right" data-ajax="false">Logout</a>
-	</div><!-- /header -->
+    <div data-role="header">
+        {% if user.is_staff %}
+        <a href="{% url admin:index %}" data-icon="gear" data-iconpos="notext" data-ajax="false">Administration</a>
+        {% endif %}
+        <h1>{{settings.APPLICATION}} v{{settings.VERSION}} (jqm {{settings.MOBILE_VERSION}})</h1>
+        <a href="{% url auth_logout %}" data-icon="delete" data-iconpos="notext" class="ui-btn-right" data-ajax="false">Logout</a>
+    </div><!-- /header -->
 
-	<div data-role="content">
-		<ul data-role="listview" data-inset="true">
-        	<li data-icon="false">
-        		<a href="{% url mobile:expenses %}" data-prefetch>
-        			<div class="menu-element expense-icon"><div>Gastos</div></div>
-        		</a>
-        	</li>
-        	<li data-icon="false">
-        		<a href="{% url mobile:loans %}">
-        			<div class="menu-element loan-icon"><div>Pr&eacute;stamos</div></div>
-        		</a>
-        	</li>
-        	<li data-icon="false">
-        		<a href="{% url mobile:tax %}">
-        			<div class="menu-element tax-icon"><div>Impuestos</div></div>
-        		</a>
-        	</li>
-        	<li data-icon="false">
-        		<a href="{% url mobile:income_list %}">
-        			<div class="menu-element income-icon"><div>Ingresos</div></div>
-        		</a>
-        	</li>        	          
-        </ul>		
-	</div><!-- /content -->
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+            <li data-icon="false">
+                <a href="{% url mobile:expenses %}" data-prefetch>
+                    <div class="menu-element expense-icon"><div>Gastos</div></div>
+                </a>
+            </li>
+            <li data-icon="false">
+                <a href="{% url mobile:loans %}">
+                    <div class="menu-element loan-icon"><div>Pr&eacute;stamos</div></div>
+                </a>
+            </li>
+            <li data-icon="false">
+                <a href="{% url mobile:tax %}">
+                    <div class="menu-element tax-icon"><div>Impuestos</div></div>
+                </a>
+            </li>
+            <li data-icon="false">
+                <a href="{% url mobile:income_list %}">
+                    <div class="menu-element income-icon"><div>Ingresos</div></div>
+                </a>
+            </li>                     
+        </ul>       
+    </div><!-- /content -->
 
 </div><!-- /page -->
 {% endblock %}

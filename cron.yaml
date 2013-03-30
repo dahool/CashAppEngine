@@ -6,7 +6,7 @@ cron:
 
 - description: update events
   url: /cron/updateevent/
-  schedule: every 2 hours
+  schedule: every 60 minutes
   timezone: America/Argentina/Buenos_Aires
 
 - description: generate current month stats
