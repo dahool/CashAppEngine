@@ -42,7 +42,7 @@
                     <label for="amount">Monto:</label>
                     <input field-focus="true" type="number" {% if loans %}readonly="readonly"{%endif%} name="amount" id="amount" value="{% if payment %}{{payment.amount}}{%else%}{{remain|floatformat:2}}{%endif%}"/>
                 </div>
-	            {% cache 600 "loan_payment_form" %}         
+	            {% cache 600 loan_payment_form %}
 	            <div data-role="fieldcontain">
 	                <label for="category">Categor&iacute;a:</label>
 	                <select name="subCategory.id" id="category" data-overlay-theme="b">

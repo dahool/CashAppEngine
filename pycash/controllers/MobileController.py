@@ -122,7 +122,15 @@ def loans_payments_multi_add(request):
             total += amount    
         except:
             pass
-    return {"loan": l, "loans": ids, "payment": None, "remain": total, "loansText": ",".join(loansText)}
+            
+    cList = SubCategory.objects.all().order_by("name")
+    
+    return {"loan": l,
+            "loans": ids,
+            "payment": None,
+            "remain": total,
+            "loansText": ",".join(loansText),
+            "categoryList": sorted(cList, key=lambda scat: scat.category.name)}
 
 @render('mobile/loans_add.html')
 def loans_add(request, id, loanId = None):
