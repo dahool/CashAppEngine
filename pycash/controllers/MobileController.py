@@ -193,3 +193,7 @@ def incomeEdit(request, id):
 @render('mobile/stats.html')
 def stats(request):
     return {'chartdata': StatsService.create_chart()}
+
+@render('mobile/stats.html')
+def stats_category(request):
+    return {'chartdata': StatsService.create_category_chart()}    

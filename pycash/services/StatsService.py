@@ -108,3 +108,18 @@ def create_chart():
     chart.add('Ingresos', incomes)
     
     return chart.render()
+
+def create_category_chart():
+    import pygal
+    chart = pygal.Pie()
+    
+    date = DateService.todayDate()
+    month = date.strftime('%Y%m')
+    
+    q = CategoryStatsData.objects.filter(month=month)
+    chart.title = 'Gastos mes %s' % q[0].display_month
+    
+    for d in q:
+        chart.add(d.category.name, float(d.amount))
+    
+    return chart.render()

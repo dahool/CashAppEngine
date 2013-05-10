@@ -46,4 +46,5 @@ urlpatterns += patterns('pycash.controllers.MobileController',
     url(r'^income/list/$', 'incomeList', name='income_list'),
     url(r'^income/edit/(?P<id>[\d]+)/$', 'incomeEdit', name='income_edit'),
     url(r'^stats/$', 'stats', name='stats'),
+    url(r'^statsCategory/$', 'stats_category', name='statsCategory'),
 )
