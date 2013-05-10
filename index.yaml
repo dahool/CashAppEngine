@@ -37,6 +37,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: expense
+  properties:
+  - name: payment_type_id
+  - name: date
+
 - kind: income
   properties:
   - name: __key__
