@@ -263,7 +263,24 @@ class StatsData(models.Model):
         db_table = "statsdata"
         verbose_name_plural = u'Stats'
         ordering = ("-month",)
+
+class CategoryStatsData(models.Model):
+    month = models.IntegerField(db_index=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
+    category = models.ForeignKey(Category)
+    
+    def __unicode__(self):
+        return "%s - A: %s - Ca: %s" % (self.display_month, self.amount, self.category.name)
         
+    @property
+    def display_month(self):
+        return u"%s-%s" % (str(self.month)[:4], str(self.month)[-2:])
+    
+    class Meta:
+        db_table = "categorystatsdata"
+        verbose_name_plural = u'Category Stats'
+        ordering = ("-month",)
+                
 class SyncRecord(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     record = models.TextField()

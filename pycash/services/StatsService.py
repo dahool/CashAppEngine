@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 from pycash.services import DateService
-from pycash.models import Expense, Income, StatsData
+from pycash.models import Expense, Income, StatsData, CategoryStatsData
 from django.conf import settings
 from pycash.services.Utils import logger
 
@@ -37,6 +37,22 @@ def generate():
     for value in values:
         create_stats(*value)
     
+def create_category_stats(fromDate, toDate):
+    logger.debug("Process Categories %s - %s" % (fromDate, toDate))
+    month = fromDate.strftime('%Y%m')
+    
+    CategoryStatsData.objects.filter(month=month).delete()
+
+    q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
+    co = 0
+    for expense in q:
+        co += 1
+        csd, c = CategoryStatsData.objects.get_or_create(month=month, category=expense.subCategory.category)
+        csd.amount = csd.amount + expense.amount
+        csd.save()
+    
+    logger.debug("Processed %s" % co)
+    
 def create_stats(fromDate, toDate):
     logger.debug("Process %s - %s" % (fromDate, toDate))
     month = fromDate.strftime('%Y%m')
@@ -47,8 +63,6 @@ def create_stats(fromDate, toDate):
     
     try:
         data = StatsData.objects.get(pk=month)
-#        if data.incomes == incomeSum:
-#            return
     except StatsData.DoesNotExist:
         data = StatsData(month=month)
         
@@ -69,9 +83,12 @@ def create_stats(fromDate, toDate):
     
     data.save()
     
+    create_category_stats(fromDate, toDate)
+    
 def create_chart():
     import pygal
-    chart = pygal.Line()
+    #chart = pygal.Line()
+    chart = pygal.Bar()
     chart.title = 'Gastos'
     
     q = StatsData.objects.all().order_by('-month')[:6]
