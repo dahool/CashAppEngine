@@ -39,7 +39,13 @@ label.ui-input-text, label.ui-select {
 .ui-text-red {
 	color: #FF0000;
 }
+.ui-text-green {
+	color: #008000;
+}
 #total-holder.ui-text-red {
+	cursor: pointer;
+}
+#subtotal-holder.ui-text-green {
 	cursor: pointer;
 }
 .ui-checkbox .ui-icon {
@@ -47,4 +53,8 @@ label.ui-input-text, label.ui-select {
     margin-top: -9px;
     position: absolute;
     top: 50%;
+}
+.ui-li-count-left {
+	left: 10px;
+	right: auto !important;
 }

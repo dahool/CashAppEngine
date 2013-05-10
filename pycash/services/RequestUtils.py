@@ -1,6 +1,9 @@
 
 def param_exist(var, req):
-    return (var in req and req[var]!="")
+    try:
+        return (var in req and req[var]!="")
+    except KeyError:
+        pass
 
 def sortMethod(req, value = None):
     if (value):

@@ -2,10 +2,12 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from pycash.models import Person, Loan, Payment
+from pycash.models import Expense, SubCategory, PaymentType
 from pycash.services import JsonParser, DateService
 from pycash.services.RequestUtils import param_exist, sortMethod
 from django.db.models import Q
 from django.db import IntegrityError, connection
+from django.conf import settings
 from decimal import *
 import string
 try:
@@ -35,8 +37,90 @@ def list(request):
     data = '{"total": %s, "rows": %s}' % (Payment.objects.count(), JsonParser.parse(list))
     return data
     
+def get_loan_to_save(data, amount = None, lid = None):
+    if not lid:
+        l = Loan.objects.get(pk=data['loan.id'])
+    else:
+        l = Loan.objects.get(pk=lid)
+    if not amount:
+        amount = l.amount / l.instalments
+        if amount > l.remain:
+            amount = l.remain 
+        validate_amount(amount)
+
+    if param_exist("id",data):
+        p = Payment.objects.get(pk=data['id'])    
+        prevAmount = p.amount
+    else:
+        p = Payment(loan=l)
+        prevAmount = None
+    
+    if checkPayment(l,amount,prevAmount):
+        if prevAmount:
+            diff = float(prevAmount) - float(amount)
+            l.remain = unicode(float(l.remain) + diff)
+        else:
+            l.remain = unicode(float(l.remain) - float(amount))
+
+        p.amount=amount
+        p.date=DateService.parseDate(data['date'])
+    else:
+        raise ValidationError(_('The entered amount is greater than the amount owed.'))
+    return (l,p)
+
 @json_response
 def save_or_update(request):
+    data = '{"success":true}'
+    req = request.REQUEST
+    loans = []
+    
+    amount = 0
+    try:
+        if param_exist('loan.ids', req):
+            lids = req.getlist('loan.ids')
+            for lid in lids:
+                loans.append(get_loan_to_save(req, None, lid));
+        else:
+            loans.append(get_loan_to_save(req, req['amount']));
+    except ValidationError, va1:
+        return '{"success":false, "msg": "%s"}' % ("".join(va1.messages))
+    
+    failed = []
+    for l,p in loans:
+        try:
+            try:
+                l.save()
+            except _mysql_exceptions.Warning:
+                pass        
+            try:
+                p.save()
+                amount += float(p.amount)
+            except _mysql_exceptions.Warning:
+                pass        
+        except Exception, e1:
+            failed.append(l.reason)
+
+    if param_exist('subCategory.id', req) and not req['subCategory.id'] == '0':
+        try:
+            subCategory = SubCategory.objects.get(pk=req['subCategory.id'])
+            pt = getattr(settings,'LOAN_PAYMENT_TYPE', None)
+            if pt:
+                paymentType = PaymentType.objects.get(pk=pt)
+                Expense.objects.create(amount=-1*amount,
+                              text=subCategory.name,
+                              date=DateService.parseDate(req['date']),
+                              subCategory=subCategory,
+                              paymentType=paymentType)
+        except Exception, e2:
+            failed.append(e2)
+
+    if len(failed) > 0:
+        return '{"success":false, "msg": "Failed to save %s"}' % ",".join(failed)
+    return data
+    
+#deprecated
+@json_response
+def save_or_update_old(request):
     data = '{"success":true}'
     req = request.REQUEST
     amount=req['amount']

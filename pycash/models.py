@@ -67,8 +67,10 @@ class PaymentType(models.Model):
     def save(self):
         self.name = capFirst(self.name)
         super(PaymentType, self).save()
+        
     def __unicode__(self):
-        return self.name  
+        return u"(%s) %s" % (self.pk, self.name)
+      
     class Meta:
         db_table = "payment_type"
         verbose_name_plural = u'Payment Types'

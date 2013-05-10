@@ -99,7 +99,30 @@ def loans_payments_add(request, id, pId = None):
         amount = l.amount / l.instalments
         if amount > l.remain:
             amount = l.remain
-    return {"loan": l, "payment": p, "remain": amount}
+            
+    cList = SubCategory.objects.all().order_by("name")
+    
+    return {"loan": l,
+            "payment": p,
+            "remain": amount,
+            "categoryList": sorted(cList, key=lambda scat: scat.category.name)}
+
+@render('mobile/loans_payments_add.html')
+def loans_payments_multi_add(request):
+    ids = request.REQUEST.getlist('loan.id')
+    total = 0
+    loansText = []
+    for i in ids:
+        try:
+            l = Loan.objects.get(pk=i)
+            loansText.append(l.reason)
+            amount = l.amount / l.instalments
+            if amount > l.remain:
+                amount = l.remain
+            total += amount    
+        except:
+            pass
+    return {"loan": l, "loans": ids, "payment": None, "remain": total, "loansText": ",".join(loansText)}
 
 @render('mobile/loans_add.html')
 def loans_add(request, id, loanId = None):
