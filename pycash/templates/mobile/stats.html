@@ -8,14 +8,25 @@
 {% endblock %}
 <body>
 {% block content %}
-<div data-role="page" data-cache="never">
+<div data-role="page" data-cache="never" data-theme="a">
 	<div data-role="header" data-theme="e" data-position="fixed">
 		<a href="{% url mobile:expenses %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
         <h1>Stats</h1>
 	</div><!-- /header -->
 
 	<div data-role="content" data-theme="a">
-		<div id="graphstats">{{chartdata|safe}}</div>	
+		<div id="graphstats">
+		{% if monthList %}
+			<div id="statsfilter">
+            <select name="month" id="statsmonth" data-overlay-theme="b" data-url="{% url mobile:statsCategory %}">
+			{% for month in monthList %}
+		        <option value="{{month.value}}" {% if current == month.value %}selected="selected"{%endif%}>{{month.label}}</option>
+			{% endfor %}
+            </select>
+            </div>
+		{% endif %}		
+		{{chartdata|safe}}
+		</div>
 	</div><!-- /content -->
 
 	{% include "mobile/footer.html" %}

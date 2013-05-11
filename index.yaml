@@ -37,6 +37,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: categorystatsdata
+  properties:
+  - name: month
+  - name: category_id
+
 - kind: expense
   properties:
   - name: __key__

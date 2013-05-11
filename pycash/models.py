@@ -83,7 +83,8 @@ class Category(models.Model):
         super(Category, self).save()
         
     def __unicode__(self):
-        return self.name
+        return u"(%s) %s" % (self.pk, self.name)
+        
     class Meta:
         db_table = "category"
         verbose_name_plural = u'Categories'
@@ -263,6 +264,7 @@ class StatsData(models.Model):
         db_table = "statsdata"
         verbose_name_plural = u'Stats'
         ordering = ("-month",)
+        get_latest_by = "month"
 
 class CategoryStatsData(models.Model):
     month = models.IntegerField(db_index=True)
@@ -279,7 +281,8 @@ class CategoryStatsData(models.Model):
     class Meta:
         db_table = "categorystatsdata"
         verbose_name_plural = u'Category Stats'
-        ordering = ("-month",)
+        ordering = ("-month", "category")
+        get_latest_by = "month"
                 
 class SyncRecord(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)

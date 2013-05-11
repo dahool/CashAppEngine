@@ -70,6 +70,14 @@ $(function() {
         });
         summatory();
         setupSideMenu();
+        
+        $("#statsmonth").on('change', function() {
+            $.mobile.changePage($(this).attr('data-url'), {
+                data: {'month': $(this).val()},
+                type: "post",
+                changeHash: false
+                });
+        });
     });
 
    // initDatebox();

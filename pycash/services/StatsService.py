@@ -41,17 +41,23 @@ def create_category_stats(fromDate, toDate):
     logger.debug("Process Categories %s - %s" % (fromDate, toDate))
     month = fromDate.strftime('%Y%m')
     
-    CategoryStatsData.objects.filter(month=month).delete()
-
-    q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
-    co = 0
-    for expense in q:
-        co += 1
-        csd, c = CategoryStatsData.objects.get_or_create(month=month, category=expense.subCategory.category)
-        csd.amount = csd.amount + expense.amount
-        csd.save()
+    categoryCache = {}
     
-    logger.debug("Processed %s" % co)
+    exclude = getattr(settings, 'STATS_CATEGORY_EXCLUDE', [])
+    
+    q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
+    for expense in q:
+        if not expense.subCategory.category.pk in exclude:
+            category = categoryCache.get(expense.subCategory.category.pk)
+            if not category:
+                category = {'category': expense.subCategory.category, 'amount': 0}
+            category['amount'] += expense.amount
+            categoryCache[expense.subCategory.category.pk] = category
+
+    CategoryStatsData.objects.filter(month=month).delete()
+    
+    for c in categoryCache.values():
+        CategoryStatsData.objects.create(month=month, category=c['category'], amount=c['amount'])
     
 def create_stats(fromDate, toDate):
     logger.debug("Process %s - %s" % (fromDate, toDate))
@@ -109,15 +115,16 @@ def create_chart():
     
     return chart.render()
 
-def create_category_chart():
+def create_category_chart(month):
     import pygal
     chart = pygal.Pie()
     
-    date = DateService.todayDate()
-    month = date.strftime('%Y%m')
+#    date = DateService.todayDate()
+#    month = date.strftime('%Y%m')
     
     q = CategoryStatsData.objects.filter(month=month)
-    chart.title = 'Gastos mes %s' % q[0].display_month
+    if q:
+        chart.title = 'Gastos mes %s' % q[0].display_month
     
     for d in q:
         chart.add(d.category.name, float(d.amount))

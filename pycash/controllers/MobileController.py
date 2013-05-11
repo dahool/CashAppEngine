@@ -22,10 +22,11 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
 from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment, Income,\
-    StatsData
+    StatsData, CategoryStatsData
 import datetime
 from django.db.models import Sum
 from pycash.services import DateService, RequestUtils, StatsService
+from pycash.services.RequestUtils import param_exist
 
 @render('mobile/expenses_frm.html')
 def expensesAdd(request, id = None):
@@ -196,4 +197,12 @@ def stats(request):
 
 @render('mobile/stats.html')
 def stats_category(request):
-    return {'chartdata': StatsService.create_category_chart()}    
+    if param_exist('month', request.REQUEST):
+        current = request.REQUEST['month']
+    else:
+        current = CategoryStatsData.objects.latest().month 
+        
+    q = StatsData.objects.all().order_by('-month')[:6]
+    data = [{'label': "%s-%s" % (str(d.month)[:4], str(d.month)[5:]), 'value': str(d.month)} for d in q]
+    
+    return {'chartdata': StatsService.create_category_chart(current), 'monthList': sorted(data, key=lambda d: int(d['value']), reverse=True), 'current': current}    

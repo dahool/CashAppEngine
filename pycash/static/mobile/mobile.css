@@ -58,3 +58,15 @@ label.ui-input-text, label.ui-select {
 	left: 10px;
 	right: auto !important;
 }
+svg { 
+	background-color: #444444 !important;
+}
+#graphstats {
+	margin-left: auto;
+	margin-right: auto;
+}
+#graphstats > *:nth-child(n) {
+	margin-left: auto;
+	margin-right: auto;
+	width: 60%;
+}
