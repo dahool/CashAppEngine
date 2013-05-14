@@ -33,6 +33,7 @@ from pycash.decorators import json_response
 
 from pycash.validators import validate_amount
 from django.core.exceptions import ValidationError
+from pycash.services.Utils import logger
 
 @render('cash/expense/index.html')
 def index(request):
@@ -179,8 +180,8 @@ def fromParams(req):
     if re.match('^[-\+\d\.]+$',amount):
         try:
             amount = str(eval(amount))
-        except:
-            pass
+        except Exception, e:
+            logger.error(e)
     validate_amount(amount)
     
     if not amount or float(amount) == 0.0:
