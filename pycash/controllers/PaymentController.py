@@ -43,7 +43,7 @@ def get_loan_to_save(data, amount = None, lid = None):
     else:
         l = Loan.objects.get(pk=lid)
     if not amount:
-        amount = l.amount / l.instalments
+        amount = round(l.amount / l.instalments,2)
         if amount > l.remain:
             amount = l.remain 
         validate_amount(amount)
