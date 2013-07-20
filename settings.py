@@ -7,9 +7,9 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.11"
+VERSION = "1.0.12"
 APPLICATION = "Cash Manager"
-MOBILE_VERSION = "1.3.0"
+MOBILE_VERSION = "1.3.2"
 JQUERY_VERSION = "1.9.1"
 EXT_VERSION = '2.2.1'
 
@@ -101,6 +101,10 @@ else:
     EXT_FILES = ['js/jquery/jquery-' + JQUERY_VERSION + '.min.js',
                  EXT_LOCATION + 'adapter/jquery/ext-jquery-adapter.js',
                  EXT_LOCATION + 'ext-all-debug.js']
+
+#JQMOBILE_URL = 'http://code.jquery.com/mobile'
+JQMOBILE_URL = 'https://appmediaserver.appspot.com/media/lib/jquery.mobile'
+JQURL = 'https://ajax.googleapis.com/ajax/libs/jquery'
                  
 USE_GOOGLE_CAL = True
 ENABLE_RECORD = True

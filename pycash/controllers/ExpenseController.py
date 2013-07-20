@@ -163,13 +163,15 @@ def list(request):
         list = q
     
     res = []
+    amount = 0
     for exp in list:
+        amount += exp.amount
         res.append({'id': exp.id, 'amount': exp.amount, 'date': exp.date,
                     'text': exp.text, 'paymentType_name': exp.paymentType.name,
                     'subCategory_name': exp.subCategory.name, 'paymentTypeId': exp.paymentType.id,
                     'subCategoryId': exp.subCategory.id})
 
-    data = '{"total": %s, "rows": %s}' % (q.count(), JsonParser.parse(res))
+    data = '{"total": %s, "rows": %s, "amount": %s}' % (q.count(), JsonParser.parse(res), amount)
     return data
 
 def fromParams(req):

@@ -52,6 +52,12 @@ indexes:
   - name: payment_type_id
   - name: date
 
+- kind: expense
+  properties:
+  - name: sub_category_id
+  - name: date
+    direction: desc
+
 - kind: income
   properties:
   - name: __key__

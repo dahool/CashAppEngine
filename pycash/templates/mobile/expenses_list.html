@@ -1,5 +1,5 @@
 {% extends "mobile/index.html" %}
-{% load math %}
+{% load math cache %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -35,9 +35,10 @@
 	</div><!-- /content -->
 
 	<div data-role="footer" class="ui-bar" data-id="footer" data-position="fixed" data-tap-toggle="false">
-		<div class="ui-grid-a">
+		<div class="ui-grid-b">
 			<div class="ui-block-a"><a href="{% url mobile:home %}" data-role="button" data-icon="home" data-iconpos="notext" data-mini="true"></a></div>
-			<div class="ui-block-b"><a data-theme="a" href="#dateFilter" data-rel="popup" data-role="button" data-corners="false" data-iconpos="right" data-mini="true" data-icon="gear" data-inline="true">{{filterStart|date:"d-m-Y"}} | {{filterEnd|date:"d-m-Y"}}</a></div>	   
+			<div class="ui-block-b">Total: ${{total|floatformat:2}}</div>
+			<div class="ui-block-c"><a data-theme="a" href="#dateFilter" data-rel="popup" data-role="button" data-corners="false" data-iconpos="right" data-mini="true" data-icon="gear" data-inline="true">{{filterStart|date:"d-m-Y"}} | {{filterEnd|date:"d-m-Y"}}</a></div>
 		</div>	
 	</div>
 	
@@ -49,10 +50,20 @@
               <label for="fromDate">Desde:</label>
               <input type="date" data-role="datebox" value="{{filterStart|date:"d/m/Y"}}" name="fromDate" id="fromDate" />
               <label for="toDate">Hasta:</label>
-              <input type="date" data-role="datebox" value="{{filterEnd|date:"d/m/Y"}}" name="toDate" id="toDate" />                
+              <input type="date" data-role="datebox" value="{{filterEnd|date:"d/m/Y"}}" name="toDate" id="toDate" />
+              {% cache 600 "expenses_list" currentCategory %}         
+			   <label for="category">Categor&iacute;a:</label>
+			   <select name="category" id="category" data-overlay-theme="b">
+                    <option data-placeholder='true' value="0">=== Categor&iacute;a ===</option>
+					{% for item in categoryList %}
+			        <option value="{{item.id}}" {% if currentCategory == item.id %}selected="selected"{%endif%}>{{item.name}}</option>
+			        {% endfor %}
+                </select>                
+              {% endcache %}
 	    	  <button type="submit" data-theme="b" data-icon="check">Aplicar</button>
 			</div>
 		</form>
+		
 	</div>
 			
 {% include "mobile/slide_menu.html" %}

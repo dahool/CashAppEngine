@@ -8,8 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="apple-touch-icon" href="{{ STATIC_URL }}images/apple-touch-icon.png"/>
 <link rel="icon" href="{{ STATIC_URL }}images/favicon.ico" type="image/x-icon" />
-<!--link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.css" /-->
-<link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.css" />
+<link rel="stylesheet" type="text/css" href="{{settings.JQMOBILE_URL}}/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.css" />
 <link media="screen" href="{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog.min.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.core.css" type="text/css" rel="stylesheet" />
@@ -19,7 +18,7 @@
 <link media="screen" href="{{ STATIC_URL }}mobile/swipe.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/images.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/mobile.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
+<script type="text/javascript" src="{{settings.JQURL}}/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/functions.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/swipe.list.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/application.js"></script>
@@ -31,17 +30,12 @@
 <script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.android-ics.js"></script>
 <script type="text/javascript">
     $(function() {
-        $.cachedScript("https://ajax.aspnetcdn.com/ajax/jquery.mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
+    	var jqmobileurl = "{{settings.JQMOBILE_URL}}";
+        $.cachedScript(jqmobileurl + "/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
             $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
             $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
             $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
-        });        
-        /*
-        $.cachedScript("http://code.jquery.com/mobile/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
-        });*/
+        });
     });
 </script> 
 {% endblock %}

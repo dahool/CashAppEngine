@@ -22,7 +22,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
 from pycash.models import PaymentType, SubCategory, Expense, Person, Loan, Tax, Payment, Income,\
-    StatsData, CategoryStatsData
+    StatsData, CategoryStatsData, Category
 import datetime
 from django.db.models import Sum
 from pycash.services import DateService, RequestUtils, StatsService
@@ -54,13 +54,29 @@ def expensesList(request):
         fromDate = DateService.parseDate(req['fromDate'])
     else:
         fromDate = toDate - datetime.timedelta(days=getattr(settings,'EXPENSES_DEFAULT_DAYS_LIST', 5))
+    
     q = Expense.objects.filter(date__gte = DateService.midNight(fromDate), date__lte = DateService.midNight(toDate, True))
+    
+    currentCategory = 0
+    if RequestUtils.param_exist("category", req) and req['category']!='0':
+        c = SubCategory.objects.filter(category=req['category']).values_list('pk', flat=True) 
+        q = q.filter(subCategory__in=list(c))
+        currentCategory = req['category']
     q = q.order_by("-date")
+    total = 0
+    for e in q:
+        total += e.amount
+        
+    cList = Category.objects.all().order_by("name")
+    
     return {"settings": settings,
             "list": q,
             "today": datetime.date.today(),
             "filterStart": fromDate,
-            "filterEnd": toDate}
+            "filterEnd": toDate,
+            "total": total,
+            "categoryList": cList,
+            "currentCategory": int(currentCategory)}
 
 @render('mobile/loans.html')
 def loansHome(request):
