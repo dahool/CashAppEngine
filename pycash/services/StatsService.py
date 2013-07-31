@@ -43,11 +43,12 @@ def create_category_stats(fromDate, toDate):
     
     categoryCache = {}
     
-    exclude = getattr(settings, 'STATS_CATEGORY_EXCLUDE', [])
+    categoryExclude = getattr(settings, 'STATS_CATEGORY_EXCLUDE', [])
+    subCategoryExclude = getattr(settings, 'STATS_SUBCATEGORY_EXCLUDE', [])
     
     q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
     for expense in q:
-        if not expense.subCategory.category.pk in exclude:
+        if not (expense.subCategory.pk in subCategoryExclude or expense.subCategory.category.pk in categoryExclude):
             category = categoryCache.get(expense.subCategory.category.pk)
             if not category:
                 category = {'category': expense.subCategory.category, 'amount': 0}
@@ -81,9 +82,13 @@ def create_stats(fromDate, toDate):
     defaultpt = getattr(settings,'STATS_PAYMENT_TYPE', None)
     if defaultpt:
         q = q.filter(paymentType__id=defaultpt)
-                
+
+    categoryExclude = getattr(settings, 'MONTH_STATS_CATEGORY_EXCLUDE', [])
+    subCategoryExclude = getattr(settings, 'MONTH_STATS_SUBCATEGORY_EXCLUDE', [])
+                    
     for expense in q:
-        expenseSum += expense.amount
+        if not (expense.subCategory.pk in subCategoryExclude or expense.subCategory.category.pk in categoryExclude):
+            expenseSum += expense.amount
     
     data.expenses= expenseSum
     

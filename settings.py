@@ -7,7 +7,7 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.12"
+VERSION = "1.0.13"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.3.2"
 JQUERY_VERSION = "1.9.1"
