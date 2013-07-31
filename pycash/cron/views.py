@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from django.core import serializers
 from pycash.decorators import json_response
-from pycash.models import SyncRecord
+from pycash.models import SyncRecord, Expense
 from pycash.services.DropboxService import StorageService
 from pycash.services import DateService, StatsService
 import datetime
@@ -71,4 +71,48 @@ def generatestats(request):
 def generatemonthstats(request):
     StatsService.generate_current()
     return {'process': 'ok'}    
+    
+@json_response
+def report(request):
+    if RequestUtils.param_exist("date", request.REQUEST):
+        date = parseDate(request.REQUEST['date'])
+    else:
+        date = DateService.addMonth(DateService.todayDate(),-1)
+    fromDate = DateService.midNight(DateService.firstDateOfMonth(date))
+    toDate = DateService.midNight(DateService.lastDateOfMonth(date),True)
+    try:
+        q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
+        filedata = StringIO.StringIO()
+        for expense in q:
+            d = {'pk': expense.pk,
+                'date': DateService.invert(expense.date),
+                'text': expense.text,
+                'amount': expense.amount,
+                'paymentTypePk': expense.paymentType.pk,
+                'paymentTypeName': expense.paymentType.name,
+                'categoryPk': expense.subCategory.category.pk,
+                'categoryName': expense.subCategory.category.name,
+                'subCategoryPk': expense.subCategory.pk,
+                'subCategoryName': expense.subCategory.name}
+            filedata.write('%(pk)s,%(date)s,"%(text)s",%(amount)s,%(paymentTypePk)s,"%(paymentTypeName)s",%(categoryPk)s,"%(categoryName)s",%(subCategoryPk)s,"%(subCategoryName)s"\n' % d)
+        
+        filename = "expensereport_%s.csv" % fromDate.strftime("%Y%m")
+        
+        if RequestUtils.param_exist("gz", request.REQUEST):
+            filezip = StringIO.StringIO()
+            zipped = gzip.GzipFile(filename, 'wb', fileobj=filezip)
+            zipped.write(filedata)
+            zipped.close()
+            st = StorageService()
+            st.file_put(filezip.getvalue(), filename + ".gz")
+        else:
+            st = StorageService()
+            st.file_put(filedata.getvalue(), filename)
+        error = ''
+    except Exception, e:
+        logger.error(str(e))
+        send_mail("EXPORT ERROR", 'Processing %s.\n\nError: %s' % (today.strftime("%Y-%m-%d"), str(e)))
+        error=str(e)
+    return {'processed': fromDate.strftime("%Y-%m"), 'error': error}
+    
     
