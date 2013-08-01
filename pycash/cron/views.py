@@ -75,7 +75,7 @@ def generatemonthstats(request):
 @json_response
 def report(request):
     if RequestUtils.param_exist("date", request.REQUEST):
-        date = parseDate(request.REQUEST['date'])
+        date = DateService.parseDate(request.REQUEST['date'])
     else:
         date = DateService.addMonth(DateService.todayDate(),-1)
     fromDate = DateService.midNight(DateService.firstDateOfMonth(date))
@@ -83,6 +83,7 @@ def report(request):
     try:
         q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
         filedata = StringIO.StringIO()
+        filedata.write('"pk","date","text","amount","paymentTypePk","paymentTypeName","categoryPk","categoryName","subCategoryPk","subCategoryName"\n')        
         for expense in q:
             d = {'pk': expense.pk,
                 'date': DateService.invert(expense.date),
@@ -111,7 +112,7 @@ def report(request):
         error = ''
     except Exception, e:
         logger.error(str(e))
-        send_mail("EXPORT ERROR", 'Processing %s.\n\nError: %s' % (today.strftime("%Y-%m-%d"), str(e)))
+        send_mail("EXPORT ERROR", 'Processing %s.\n\nError: %s' % (fromDate.strftime("%Y-%m"), str(e)))
         error=str(e)
     return {'processed': fromDate.strftime("%Y-%m"), 'error': error}
     

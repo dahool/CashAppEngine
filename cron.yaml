@@ -18,3 +18,8 @@ cron:
   url: /cron/generatestats/
   schedule: 3rd day of month 0:00
   timezone: America/Argentina/Buenos_Aires
+
+- description: generate previous month report
+  url: /cron/report/
+  schedule: 3rd day of month 0:00
+  timezone: America/Argentina/Buenos_Aires
