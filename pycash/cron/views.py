@@ -27,6 +27,7 @@ import gzip
 from pycash.services import RequestUtils
 from pycash.services.Utils import logger
 from django.core.mail import mail_managers as send_mail
+from django.utils.encoding import smart_str
 
 @json_response
 def backup(request):
@@ -83,7 +84,7 @@ def report(request):
     try:
         q = Expense.objects.filter(date__gte=fromDate, date__lte=toDate)
         filedata = StringIO.StringIO()
-        filedata.write('"pk","date","text","amount","paymentTypePk","paymentTypeName","categoryPk","categoryName","subCategoryPk","subCategoryName"\n')        
+        filedata.write('"pk","date","text","amount","paymentTypePk","paymentTypeName","categoryPk","categoryName","subCategoryPk","subCategoryName"\n')
         for expense in q:
             d = {'pk': expense.pk,
                 'date': DateService.invert(expense.date),
@@ -95,7 +96,7 @@ def report(request):
                 'categoryName': expense.subCategory.category.name,
                 'subCategoryPk': expense.subCategory.pk,
                 'subCategoryName': expense.subCategory.name}
-            filedata.write('%(pk)s,%(date)s,"%(text)s",%(amount)s,%(paymentTypePk)s,"%(paymentTypeName)s",%(categoryPk)s,"%(categoryName)s",%(subCategoryPk)s,"%(subCategoryName)s"\n' % d)
+            filedata.write(smart_str('%(pk)s,%(date)s,"%(text)s",%(amount)s,%(paymentTypePk)s,"%(paymentTypeName)s",%(categoryPk)s,"%(categoryName)s",%(subCategoryPk)s,"%(subCategoryName)s"\n' % d, 'latin1'))
         
         filename = "expensereport_%s.csv" % fromDate.strftime("%Y%m")
         
