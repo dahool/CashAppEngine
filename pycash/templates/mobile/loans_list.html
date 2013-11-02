@@ -35,6 +35,13 @@
             </li>
             {% endfor %}
         </ul>
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+            </div>
+            <div class="ui-block-b">
+                <a href="{% url mobile:loans_list_all person.id %}" data-role="button" data-icon="bars">Todos</a> 
+            </div>
+        </div>
     </div><!-- /content -->
     
     {% include "mobile/footer.html" %}

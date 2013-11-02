@@ -11,7 +11,14 @@
 	<div data-role="header" data-theme="b" data-position="fixed">
         <a href="{% url mobile:loans_list loan.person.id %}" data-icon="back" data-theme="b" data-rel="back">Volver</a>
         <h1>{{loan.person.name}}</h1>
-        <a href="{% url mobile:loans_payments_add loan.id %}" data-icon="add" data-iconpos="notext" data-theme="f">Nuevo Pago</a>
+        <div class="ui-body-a ui-body">
+		<div data-role="navbar" data-iconpos="left">
+			<ul>
+				<li><a href="{% url mobile:loans_edit loan.person.id loan.id %}" data-icon="edit" data-theme="c">Editar</a></li>
+				<li><a href="{% url mobile:loans_payments_add loan.id %}" data-icon="add" data-iconpos="notext" data-theme="f">Nuevo Pago</a></li>
+			</ul>
+		</div><!-- /navbar -->
+		</div>
 	</div><!-- /header -->
 
 	<div data-role="content" data-return="{% url mobile:loans_payments loan.id %}">

@@ -10,11 +10,15 @@
 <div data-role="page">
 	<div data-role="header" data-theme="e" data-position="fixed">
         <a href="{% url mobile:loans_list person.id %}" data-icon="back" data-theme="b" data-rel="back">Cancelar</a>
+        {% if loan %}
+        <h1>Editar Préstamo [{{person.name}}]</h1>
+        {% else %}
         <h1>Nuevo Préstamo [{{person.name}}]</h1>
+        {% endif %}
         <a data-icon="check" data-theme="c" form-submit="#form-add-{{requestid}}" return="back">Guardar</a>
 	</div><!-- /header -->
 
-	<div data-role="content">	
+	<div data-role="content" data-return="{% url mobile:loans_list person.id %}">	
         <form id="form-add-{{requestid}}" action="{% url loan_save %}">
         	{% csrf_token %}
         	<input type="hidden" name="person.id" value="{{person.id}}"/>
@@ -42,6 +46,15 @@
                 </li>
             </ul>
         </form>
+        {% if loan %}
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+            </div>
+            <div class="ui-block-b">
+                <a onclick='confirmSingleAction("{% url loan_delete %}","{{loan.id}}")' data-role="button" data-icon="delete">Eliminar</a> 
+            </div>
+        </div>
+        {% endif %}           
 	</div><!-- /content -->
 	
 	{% include "mobile/footer.html" %}

@@ -100,6 +100,18 @@ def loans_list(request, id):
     return {"person": p,
             "list": sorted(llist, key=lambda loan: loan.date),"total": total}
 
+@render('mobile/loans_list.html')
+def loans_list_all(request, id):
+    p = Person.objects.get(pk=id)
+    llist = p.loans.all()
+    if (llist.count() > 0):
+        total = 0
+        for loan in llist:
+            total += loan.remain
+    else:
+        total = 0
+    return {"person": p, "list": sorted(llist, key=lambda loan: loan.date, reverse=True),"total": total}
+    
 @render('mobile/loans_payments.html')
 def loans_payments(request, id):
     l = Loan.objects.get(pk=id)
