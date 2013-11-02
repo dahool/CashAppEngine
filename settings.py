@@ -9,7 +9,7 @@ PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
 VERSION = "1.0.14"
 APPLICATION = "Cash Manager"
-MOBILE_VERSION = "1.3.2"
+MOBILE_VERSION = "1.4.0-rc.1"
 JQUERY_VERSION = "1.9.1"
 EXT_VERSION = '2.2.1'
 

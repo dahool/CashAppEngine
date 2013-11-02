@@ -44,7 +44,7 @@
 {% block content %}
 <div data-role="page" id="main">
 
-    <div data-role="header">
+    <div data-role="header" data-theme="b">
         {% if user.is_staff %}
         <a href="{% url admin:index %}" data-icon="gear" data-iconpos="notext" data-ajax="false">Administration</a>
         {% endif %}

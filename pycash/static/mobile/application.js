@@ -43,7 +43,8 @@ $(function() {
             doPostAction($frm.attr('action'), $frm.serialize(), $frm, rte, function() {$elem.show()});
             return false;
         });
-        $("[data-role=header]").fixedtoolbar({ tapToggle: false });
+        // deprecated, now part of jquery fixed toolbar widget
+        //$("[data-role=header]").fixedtoolbar({ tapToggle: false });
     });     
     
     $(document).on("dateboxbeforecreate", function() {
