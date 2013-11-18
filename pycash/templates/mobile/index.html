@@ -18,26 +18,6 @@
 <link media="screen" href="{{ STATIC_URL }}mobile/swipe.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/images.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="{{ STATIC_URL }}mobile/mobile.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="{{settings.JQURL}}/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/functions.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/swipe.list.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/application.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.postpatch.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.core.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.datetime.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.core-es.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.datetime-es.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.android-ics.js"></script>
-<script type="text/javascript">
-    $(function() {
-    	var jqmobileurl = "{{settings.JQMOBILE_URL}}";
-        $.cachedScript(jqmobileurl + "/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
-            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
-        });
-    });
-</script> 
 {% endblock %}
 </head>
 <body style="display: none;">
@@ -80,4 +60,24 @@
 </div><!-- /page -->
 {% endblock %}
 </body>
+<script type="text/javascript" src="{{settings.JQURL}}/{{settings.JQUERY_VERSION}}/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/functions.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/swipe.list.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/application.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.postpatch.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.core.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.datetime.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.core-es.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.datetime-es.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}mobile/lib/mobiscroll/mobiscroll.android-ics.js"></script>
+<script type="text/javascript">
+    $(function() {
+    	var jqmobileurl = "{{settings.JQMOBILE_URL}}";
+        $.cachedScript(jqmobileurl + "/{{settings.MOBILE_VERSION}}/jquery.mobile-{{settings.MOBILE_VERSION}}.min.js").done(function() {
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.simpledialog2.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.notify.js");
+            $.cachedScript("{{ STATIC_URL }}mobile/lib/jqm/jquery.mobile.mobiscroll.js");   
+        });
+    });
+</script> 
 </html>

@@ -4,7 +4,7 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
-default_expiration: '14d'
+default_expiration: '30d'
 
 builtins:
 - remote_api: on
@@ -53,7 +53,7 @@ handlers:
   
 - url: /media
   static_dir: pycash/static
-  expiration: '1d'
+  expiration: '7d'
   
 - url: /cron/.*
   script: djangoappengine.main.application
