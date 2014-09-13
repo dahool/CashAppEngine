@@ -132,6 +132,6 @@ def create_category_chart(month):
         chart.title = 'Gastos mes %s' % q[0].display_month
     
     for d in q:
-        chart.add(d.category.name, float(d.amount))
-    
-    return chart.render()
+        chart.add("%s [$%0.2f]" % (d.category.name, d.amount), float(d.amount))
+
+    return (chart.render(), q)

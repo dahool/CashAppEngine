@@ -51,7 +51,7 @@ def upcoming(request):
 def upcomingList(request):
     req = request.REQUEST
     limit = (datetime.datetime.now() + datetime.timedelta(days=5))
-    q = Tax.objects.filter(expire__lte=limit)
+    q = Tax.objects.filter(expire__lte=limit, amount__gt=0)
                          
     res = []
     for it in q:

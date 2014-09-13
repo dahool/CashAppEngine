@@ -1,5 +1,5 @@
 application: pycashexdev
-version: 1014
+version: 1016
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -72,3 +72,4 @@ handlers:
   
 - url: /.*
   script: djangoappengine.main.application
+  secure: always

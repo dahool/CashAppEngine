@@ -1,4 +1,5 @@
 {% extends "mobile/index.html" %}
+{% load math %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -7,7 +8,7 @@
 {% endblock %}
 <body>
 {% block content %}
-<div data-role="page">
+<div data-role="page" data-cache="never">
 	<div data-role="header" data-theme="f" data-position="fixed">
         <a href="{% url mobile:home %}" data-icon="back" data-iconpos="notext" data-rel="back"></a>
         <h1>Impuestos</h1>
@@ -36,6 +37,21 @@
 			<li>Sin vencimientos en los pr&oacute;ximos 5 d&iacute;as.</li>			
 			{% endfor %}
 		</ul>
+    
+        {% if listmonth %}
+		<ul data-role="listview" data-inset="true" data-split-icon="plus" data-split-theme="e">
+		<li data-role="list-divider">Mes actual <span class="ui-li-count">Total: ${{listmonth|sumlist:"amount"|floatformat:2}}</span></li>
+			{% for tax in listmonth %}
+			<li>
+				<a href="{% url mobile:tax_edit tax.id %}">{{tax.service}}
+				<span class="ui-li-count" style="top: 15px;">Vencimiento: {{tax.expire}}</span>
+				<span class="ui-li-aside" style="margin-top: 30px; ">Monto ${{tax.amount|floatformat:2}}</span>
+				</a>
+				<a href="{% url mobile:tax_pay tax.id %}">Pagar</a>
+            </li>
+            {% endfor %}
+		</ul>
+        {% endif %}
 	</div><!-- /content -->
 </div><!-- /page -->
 {% endblock %}

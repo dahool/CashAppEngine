@@ -7,10 +7,10 @@ import os
 
 PROJECT_PATH = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 
-VERSION = "1.0.14"
+VERSION = "1.0.16"
 APPLICATION = "Cash Manager"
 MOBILE_VERSION = "1.3.2"
-JQUERY_VERSION = "1.9.1"
+JQUERY_VERSION = "2.1.1"
 EXT_VERSION = '2.2.1'
 
 # Activate django-dbindexer for the default database
@@ -27,7 +27,6 @@ TZ_OFFSET = -180
 SECRET_KEY = '1234567890'
 
 INSTALLED_APPS = (
-#    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',

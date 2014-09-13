@@ -41,6 +41,10 @@ def main():
             cmd += ' -A %s' % settings.APP_ID
         if getattr(settings, 'APP_USER',False):
             cmd += ' --email=%s' % settings.APP_USER
+        if getattr(settings,'APP_TOKEN', False):
+            cmd += ' --oauth2_refresh_token=%s' % settings.APP_TOKEN
+        else:
+            cmd += ' --oauth2 --noauth_local_webserver'
         os.system(cmd)
         
 if __name__ == '__main__':
