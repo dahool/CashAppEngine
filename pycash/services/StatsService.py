@@ -58,7 +58,8 @@ def create_category_stats(fromDate, toDate):
     CategoryStatsData.objects.filter(month=month).delete()
     
     for c in categoryCache.values():
-        CategoryStatsData.objects.create(month=month, category=c['category'], amount=c['amount'])
+        if c['amount'] > 0:
+            CategoryStatsData.objects.create(month=month, category=c['category'], amount=c['amount'])
     
 def create_stats(fromDate, toDate):
     logger.debug("Process %s - %s" % (fromDate, toDate))
@@ -90,7 +91,7 @@ def create_stats(fromDate, toDate):
         if not (expense.subCategory.pk in subCategoryExclude or expense.subCategory.category.pk in categoryExclude):
             expenseSum += expense.amount
     
-    data.expenses= expenseSum
+    data.expenses = expenseSum
     
     data.save()
     
@@ -99,7 +100,7 @@ def create_stats(fromDate, toDate):
 def create_chart():
     import pygal
     #chart = pygal.Line()
-    chart = pygal.Bar()
+    chart = pygal.Bar(disable_xml_declaration=True)
     chart.title = 'Gastos'
     
     q = StatsData.objects.all().order_by('-month')[:6]
@@ -122,7 +123,7 @@ def create_chart():
 
 def create_category_chart(month):
     import pygal
-    chart = pygal.Pie()
+    chart = pygal.Pie(truncate_legend=50, disable_xml_declaration=True)
     
 #    date = DateService.todayDate()
 #    month = date.strftime('%Y%m')
