@@ -177,7 +177,8 @@ def taxHome(request):
     upcoming = Tax.objects.filter(expire__lte=limit).order_by('expire')
     upcoming = [tax for tax in upcoming if tax.amount > 0]
     current = Tax.objects.filter(expire__range=(DateService.firstDateOfMonth(datetime.date.today()), DateService.lastDateOfMonth(datetime.date.today())))
-    return {"list": upcoming, "listmonth": sorted(current, key=lambda service: tax.service)}
+    nextList = Tax.objects.filter(expire__range=DateService.getMonthDateRange(DateService.addMonth(DateService.todayDate(), 1)))
+    return {"list": upcoming, "listmonth": sorted(current, key=lambda service: tax.service), "listnextmonth": sorted(nextList, key=lambda service: tax.service)}
 
 @render('mobile/tax_list.html') 
 def taxList(request):

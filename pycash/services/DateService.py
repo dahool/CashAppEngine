@@ -72,6 +72,11 @@ def addMonth(date,n):
     delta = relativedelta(months=n)
     return date + delta
 
+def getMonthDateRange(date):
+    start = firstDateOfMonth(date)
+    end = lastDateOfMonth(date)
+    return (start, end)
+
 def getMonthRange(start, end):
     diff = int((end - start).days / 30)
     delta = relativedelta(months=1)

@@ -36,7 +36,7 @@ def prompt_continue():
 def main():
     update_version()
     if prompt_continue():
-        cmd = 'appcfg.py update .'
+        cmd = 'appcfg.py'
         if getattr(settings,'APP_ID',False):
             cmd += ' -A %s' % settings.APP_ID
         if getattr(settings, 'APP_USER',False):
@@ -45,6 +45,8 @@ def main():
             cmd += ' --oauth2_refresh_token=%s' % settings.APP_TOKEN
         else:
             cmd += ' --oauth2 --noauth_local_webserver'
+        cmd += ' update .'
+        print cmd
         os.system(cmd)
         
 if __name__ == '__main__':
